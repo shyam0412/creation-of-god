@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Find Myself</title>
+
+<!-- PWA / Home Screen Icon -->
+<meta name="application-name" content="Find Myself">
+<meta name="apple-mobile-web-app-title" content="Find Myself">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A0A00">
+<meta name="description" content="Discover the divine meaning placed within you. Find your sacred flower and God's message.">
+
+<!-- Inline SVG icon as data URI — OM symbol on dark gold background -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%231A0A00'/%3E%3Crect width='512' height='512' rx='80' fill='url(%23g)'/%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='40%25' r='60%25'%3E%3Cstop offset='0' stop-color='%23C9933A' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%231A0A00' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='256' cy='256' r='220' fill='none' stroke='%23C9933A' stroke-width='4' opacity='.4'/%3E%3Ccircle cx='256' cy='256' r='180' fill='none' stroke='%23C9933A' stroke-width='2' opacity='.25'/%3E%3Ctext x='256' y='330' font-family='serif' font-size='280' text-anchor='middle' fill='%23F0C060'%3E%E0%A5%90%3C/text%3E%3C/svg%3E">
+
+<!-- Apple touch icon (192x192 equivalent) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%231A0A00'/%3E%3Ccircle cx='256' cy='256' r='220' fill='none' stroke='%23C9933A' stroke-width='5' opacity='.4'/%3E%3Ctext x='256' y='330' font-family='serif' font-size='280' text-anchor='middle' fill='%23F0C060'%3E%E0%A5%90%3C/text%3E%3C/svg%3E">
+
+<!-- PWA Manifest inline -->
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Find+Myself%22%2C%22short_name%22%3A%22Find+Myself%22%2C%22description%22%3A%22Discover+your+divine+meaning%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%231A0A00%22%2C%22theme_color%22%3A%22%23C9933A%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg+xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'+viewBox%3D'0+0+512+512'%253E%253Crect+width%3D'512'+height%3D'512'+fill%3D'%25231A0A00'%2F%253E%253Ctext+x%3D'256'+y%3D'330'+font-family%3D'serif'+font-size%3D'280'+text-anchor%3D'middle'+fill%3D'%2523F0C060'%253E%25E0%25A5%2590%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+Devanagari:wght@300;400;500&display=swap" rel="stylesheet">
+<style>/* ═══ PURE MOBILE LAYOUT ═══ */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{overflow-x:hidden;}
+body{
+  font-family:'Cormorant Garamond',serif;
+  background:#1A0A00;
+  color:#FDF6E3;
+  width:100vw;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+}
+
+/* Fixed decorative elements - must not affect layout */
+.mandala-wrap{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(500px,100vw);height:min(500px,100vw);
+  opacity:.04;animation:mspin 90s linear infinite;
+  pointer-events:none;z-index:0;overflow:hidden;
+}
+@keyframes mspin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+.petal{position:fixed;pointer-events:none;z-index:1;animation:pfall linear infinite;opacity:0;font-size:14px;}
+@keyframes pfall{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}8%{opacity:.7;}90%{opacity:.3;}100%{transform:translateY(110vh) rotate(600deg);opacity:0;}}
+
+/* Splash - full screen */
+.splash{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:30px;background:#1A0A00;
+}
+
+/* ─── APP SHELL ─── */
+.app-shell{
+  width:100vw;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  z-index:2;
+}
+
+/* ─── TOP BAR ─── */
+.top-bar{
+  width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;
+  background:rgba(10,4,0,.97);
+  border-bottom:1px solid rgba(201,147,58,.25);
+  position:sticky;top:0;z-index:500;
+  flex-shrink:0;
+}
+
+/* ─── SCROLL CONTENT ─── */
+.scroll-content{
+  width:100%;
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:80px;
+  scrollbar-width:none;
+}
+.scroll-content::-webkit-scrollbar{display:none;}
+
+/* ─── BOTTOM NAV ─── */
+.bottom-nav{
+  width:100%;
+  display:flex;
+  background:rgba(8,3,0,.98);
+  border-top:2px solid rgba(201,147,58,.35);
+  flex-shrink:0;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.bnav-btn{flex:1;padding:11px 8px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;border:none;background:transparent;position:relative;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.bnav-btn::after{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,#F0C060,transparent);transform:scaleX(0);transition:transform .3s;}
+.bnav-btn.on::after{transform:scaleX(1);}
+.bi{font-size:1.4rem;transition:transform .2s;}
+.bnav-btn.on .bi{transform:scale(1.15);}
+.bl{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,192,96,.5);font-family:'Cormorant Garamond',serif;transition:color .2s;}
+.bnav-btn.on .bl,.bnav-btn:hover .bl{color:#F0C060;}
+
+/* ── SECTIONS ── */
+.sec{display:none;padding-bottom:20px;}
+.sec.on{display:block;}
+
+/* ── MANDALA BG (CSS only, no image) ── */
+.mandala-wrap{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(500px,100vw);height:min(500px,100vw);pointer-events:none;z-index:0;opacity:.05;animation:mspin 90s linear infinite;}
+@keyframes mspin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+.mandala-wrap svg{width:100%;height:100%;}
+
+/* ── PETALS ── */
+.petal{position:fixed;pointer-events:none;z-index:1;animation:pfall linear infinite;opacity:0;font-size:14px;}
+@keyframes pfall{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}8%{opacity:.7;}90%{opacity:.3;}100%{transform:translateY(110vh) rotate(600deg);opacity:0;}}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:28px 20px 16px;position:relative;z-index:2;}
+.om-sym{font-size:2.6rem;color:var(--gl);display:block;margin-bottom:6px;animation:ompulse 4s ease-in-out infinite;}
+@keyframes ompulse{0%,100%{text-shadow:0 0 16px rgba(240,192,96,.4);}50%{text-shadow:0 0 40px rgba(240,192,96,.9),0 0 70px rgba(255,107,0,.4);}}
+.hero h1{font-size:clamp(1.4rem,5vw,2rem);font-weight:300;color:var(--gl);margin-bottom:4px;}
+.hero h1 em{font-style:italic;color:var(--sl);}
+.hero-sk{font-family:'Noto Sans Devanagari',sans-serif;font-size:.76rem;color:rgba(201,147,58,.65);letter-spacing:.12em;margin-bottom:6px;}
+.hero p{font-size:.9rem;color:rgba(253,246,227,.55);font-style:italic;line-height:1.6;}
+
+/* ── DIVIDER ── */
+.div{display:flex;align-items:center;gap:10px;padding:0 24px;margin:12px 0;}
+.div::before,.div::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,147,58,.4),transparent);}
+.div span{color:var(--gold);font-size:.9rem;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin:0 16px 14px;position:relative;z-index:2;}
+.card-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--sl);margin-bottom:10px;}
+
+/* ── INPUTS ── */
+.inp{width:100%;padding:12px 16px;background:rgba(255,255,255,.05);border:1.5px solid var(--border);border-radius:40px;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--cream);text-align:center;outline:none;transition:all .3s;letter-spacing:.04em;}
+.inp::placeholder{color:rgba(253,246,227,.3);font-style:italic;}
+.inp:focus{border-color:var(--gl);background:rgba(255,255,255,.07);box-shadow:0 0 0 3px rgba(240,192,96,.08);}
+.inp.error{border-color:#ef4444;animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+.inp-err-msg{font-size:.78rem;color:#ef4444;text-align:center;margin-top:6px;display:none;}
+.inp-err-msg.show{display:block;}
+
+.textarea-inp{width:100%;padding:12px 16px;background:rgba(255,255,255,.05);border:1.5px solid var(--border);border-radius:14px;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--cream);outline:none;resize:none;transition:border-color .2s;line-height:1.6;}
+.textarea-inp::placeholder{color:rgba(253,246,227,.3);font-style:italic;}
+.textarea-inp:focus{border-color:var(--gl);}
+
+/* ── BUTTONS ── */
+.btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--saffron));border:none;border-radius:40px;font-family:'Cormorant Garamond',serif;font-size:1rem;color:#1A0A00;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:all .3s;margin-top:10px;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,147,58,.4);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn-secondary{width:100%;padding:11px;background:transparent;border:1.5px solid var(--border);border-radius:40px;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--gl);cursor:pointer;letter-spacing:.05em;transition:all .2s;margin-top:8px;}
+.btn-secondary:hover{border-color:var(--gl);background:rgba(201,147,58,.07);}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:12px;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:#fff;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-wa:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,211,102,.35);}
+.btn-wa span,.btn-wa *{color:#fff;}
+.btn-dl{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:transparent;border:1.5px solid rgba(201,147,58,.4);border-radius:12px;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--gl);cursor:pointer;transition:all .2s;}
+.btn-dl:hover{background:rgba(201,147,58,.08);}
+.btn-back{display:flex;align-items:center;gap:6px;background:transparent;border:none;color:rgba(201,147,58,.7);font-family:'Cormorant Garamond',serif;font-size:.9rem;cursor:pointer;padding:12px 16px 0;transition:color .2s;}
+.btn-back:hover{color:var(--gl);}
+.btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone{border:2px dashed rgba(201,147,58,.35);border-radius:16px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:all .3s;background:rgba(255,255,255,.02);}
+.upload-zone:hover{border-color:var(--gl);background:rgba(201,147,58,.06);}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.uz-inner{padding:28px 16px 24px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.uz-circle{width:80px;height:80px;border-radius:50%;background:rgba(201,147,58,.08);border:2px dashed rgba(201,147,58,.45);display:flex;align-items:center;justify-content:center;font-size:2rem;font-style:normal;color:rgba(240,192,96,.8);letter-spacing:0;margin-bottom:4px;}
+.uz-title{font-size:.82rem;color:rgba(253,246,227,.45);font-style:italic;font-weight:300;}
+.uz-sub{font-size:1.05rem;color:var(--gl);font-weight:500;letter-spacing:.02em;}
+.uz-note{font-size:.68rem;color:rgba(201,147,58,.5);background:rgba(201,147,58,.07);border-radius:20px;padding:3px 12px;border:1px solid rgba(201,147,58,.18);margin-top:2px;}
+.uz-added{padding:14px;display:none;flex-direction:column;align-items:center;gap:8px;}
+.uz-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold);box-shadow:0 0 14px rgba(201,147,58,.4);}
+.uz-change{font-size:.7rem;color:rgba(253,246,227,.4);font-style:italic;}
+
+/* ── ERROR BOX ── */
+.err-box{display:none;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.35);border-radius:12px;padding:14px 16px;margin:0 16px 12px;text-align:center;font-size:.88rem;color:#fca5a5;line-height:1.6;}
+.err-box.show{display:block;}
+.err-box button{margin-top:8px;padding:6px 18px;border:1px solid rgba(220,38,38,.4);border-radius:20px;background:transparent;color:#fca5a5;font-family:'Cormorant Garamond',serif;font-size:.82rem;cursor:pointer;}
+
+/* ── LOADING ── */
+.loading{display:none;text-align:center;padding:40px 20px;}
+.loading.show{display:block;}
+.chakra{width:60px;height:60px;margin:0 auto 16px;animation:crot 2s linear infinite;}
+@keyframes crot{to{transform:rotate(360deg);}}
+.loading p{font-size:.95rem;color:var(--gl);font-style:italic;animation:fpulse 2s ease-in-out infinite;}
+@keyframes fpulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+.loading .l-sk{font-family:'Noto Sans Devanagari',sans-serif;font-size:.72rem;color:rgba(201,147,58,.55);margin-top:5px;}
+
+/* ── RESULT ── */
+.result{display:none;margin:0 16px 16px;animation:crise .6s ease both;}
+@keyframes crise{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.result.show{display:block;}
+.result-img-wrap{position:relative;border-radius:18px;overflow:hidden;margin-bottom:14px;}
+.result-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.result-img-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(5,1,0,.95) 100%);}
+.result-name-chip{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.5);border-radius:20px;padding:4px 12px;font-size:.75rem;color:var(--gl);letter-spacing:.08em;backdrop-filter:blur(6px);}
+.flower-badge{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(201,147,58,.15);border:1px solid rgba(240,192,96,.45);border-radius:30px;padding:7px 18px;text-align:center;white-space:nowrap;backdrop-filter:blur(8px);}
+.fb-em{font-size:1.4rem;display:block;margin-bottom:1px;}
+.fb-nm{font-size:.7rem;color:var(--gl);letter-spacing:.1em;text-transform:uppercase;}
+
+/* Result sections */
+.shloka-box{background:rgba(201,147,58,.07);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:11px 14px;margin-bottom:14px;}
+.sh-text{font-family:'Noto Sans Devanagari',sans-serif;font-size:.82rem;color:var(--gl);line-height:1.8;margin-bottom:3px;}
+.sh-src{font-size:.7rem;color:rgba(201,147,58,.55);font-style:italic;}
+
+.sec-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--sl);margin-bottom:5px;}
+.big-title{font-size:1.35rem;font-weight:300;color:var(--gl);margin-bottom:3px;}
+.sk-title{font-family:'Noto Sans Devanagari',sans-serif;font-size:.7rem;color:var(--sl);letter-spacing:.09em;margin-bottom:10px;}
+.body-txt{font-size:.98rem;color:rgba(253,246,227,.82);line-height:1.85;font-style:italic;font-weight:300;margin-bottom:12px;}
+
+/* Name meaning */
+.name-box{background:rgba(255,107,0,.07);border:1px solid rgba(255,107,0,.2);border-radius:12px;padding:14px;margin-bottom:12px;}
+.nb-origin{font-size:.76rem;color:rgba(201,147,58,.65);font-style:italic;margin-bottom:5px;}
+.nb-meaning{font-size:.95rem;color:rgba(253,246,227,.85);line-height:1.75;font-style:italic;}
+
+/* Face reading */
+.face-box{background:rgba(74,124,89,.08);border:1px solid rgba(74,124,89,.28);border-radius:12px;padding:14px;margin-bottom:12px;}
+.fb-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:#6dd68e;margin-bottom:6px;}
+.fb-text{font-size:.93rem;color:rgba(253,246,227,.82);line-height:1.75;font-style:italic;}
+
+/* Pillars */
+.pillars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.pillar{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:11px;padding:11px 7px;text-align:center;}
+.pi{font-size:1.2rem;margin-bottom:4px;display:block;}
+.pt{font-size:.62rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);margin-bottom:2px;}
+.pv{font-size:.76rem;color:var(--cream);line-height:1.4;}
+
+/* Questions */
+.q-item{border-bottom:1px solid rgba(201,147,58,.1);padding:12px 0;}
+.q-item:last-child{border-bottom:none;}
+.q-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--sl);margin-bottom:4px;}
+.q-ans{font-size:.95rem;color:rgba(253,246,227,.85);line-height:1.75;font-style:italic;}
+
+/* God's message */
+.gm-box{background:linear-gradient(135deg,rgba(255,107,0,.1),rgba(201,147,58,.07));border:1px solid rgba(255,154,60,.22);border-radius:14px;padding:16px;text-align:center;margin-bottom:14px;}
+.gm-lbl{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sl);margin-bottom:8px;}
+.gm-text{font-size:1rem;color:var(--gl);line-height:1.8;font-style:italic;}
+
+/* Share card preview */
+.share-preview-wrap{border-radius:14px;overflow:hidden;line-height:0;border:1px solid var(--border);margin-bottom:10px;background:#000;}
+#findself-share-canvas{width:100%;display:block;max-height:300px;object-fit:contain;}
+
+/* ── WISDOM SECTION ── */
+.wisdom-section{padding:20px 16px;}
+.wisdom-title{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(253,246,227,.35);text-align:center;margin-bottom:14px;}
+.wc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;}
+.wc::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.wc-book{font-size:.63rem;color:var(--sl);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.wc-text{font-size:.9rem;color:rgba(253,246,227,.72);line-height:1.65;font-style:italic;}
+.wc-meaning{font-size:.78rem;color:rgba(201,147,58,.6);margin-top:5px;line-height:1.5;}
+
+/* ── CREATE STORY ── */
+.story-hero{text-align:center;padding:22px 18px 10px;position:relative;z-index:2;}
+.story-hero .om-sym{font-size:2rem;}
+.story-hero h2{font-size:1.5rem;font-weight:300;color:var(--gl);}
+.story-hero h2 em{font-style:italic;color:var(--sl);}
+.story-hero p{font-size:.85rem;color:rgba(253,246,227,.5);font-style:italic;line-height:1.5;}
+
+/* Animated flowers */
+.fl-row{display:flex;justify-content:center;padding:8px 0 14px;gap:2px;}
+.afl{animation:flbounce 3s ease-in-out infinite;}
+.afl:nth-child(1){font-size:1.5rem;animation-delay:0s;}
+.afl:nth-child(2){font-size:1.2rem;animation-delay:.25s;}
+.afl:nth-child(3){font-size:1.7rem;animation-delay:.5s;}
+.afl:nth-child(4){font-size:1.2rem;animation-delay:.75s;}
+.afl:nth-child(5){font-size:1.4rem;animation-delay:1s;}
+.afl:nth-child(6){font-size:1.1rem;animation-delay:.4s;}
+.afl:nth-child(7){font-size:1.6rem;animation-delay:.65s;}
+.afl:nth-child(8){font-size:1.1rem;animation-delay:.9s;}
+.afl:nth-child(9){font-size:1.3rem;animation-delay:1.2s;}
+@keyframes flbounce{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-9px) rotate(4deg);}}
+
+/* BG picker — solid colors, no images */
+.bp-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(201,147,58,.55);margin-bottom:9px;text-align:center;}
+.bp-scroll{display:flex;gap:9px;overflow-x:auto;padding:2px 16px 8px;scrollbar-width:none;scroll-snap-type:x mandatory;}
+.bp-scroll::-webkit-scrollbar{display:none;}
+.bp-opt{flex-shrink:0;width:80px;height:142px;border-radius:12px;cursor:pointer;border:2.5px solid transparent;transition:all .2s;position:relative;overflow:hidden;scroll-snap-align:start;display:flex;align-items:flex-end;}
+.bp-opt.sel{border-color:var(--gl);box-shadow:0 0 14px rgba(240,192,96,.45);}
+.bp-opt .bp-name{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:.55rem;color:var(--gl);padding:4px 2px;letter-spacing:.06em;background:rgba(0,0,0,.5);}
+/* Golden mandala overlay on each bg card */
+.bp-opt::before{content:'❋';position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:2.8rem;color:rgba(240,192,96,.18);pointer-events:none;}
+/* 8 solid colour backgrounds */
+.bg0{background:linear-gradient(160deg,#0D0520,#1a0a2e,#0a0818);}
+.bg1{background:linear-gradient(160deg,#0a1a0a,#0d2b0d,#051005);}
+.bg2{background:linear-gradient(160deg,#1a0505,#2d0a0a,#0f0303);}
+.bg3{background:linear-gradient(160deg,#1a1000,#2e1c00,#0f0800);}
+.bg4{background:linear-gradient(160deg,#05101a,#0a1e2d,#020a10);}
+.bg5{background:linear-gradient(160deg,#12001a,#200030,#0a0012);}
+.bg6{background:linear-gradient(160deg,#001a12,#002d1e,#000f0a);}
+.bg7{background:linear-gradient(160deg,#1a1a00,#2d2d00,#0f0f00);}
+
+/* Photo upload */
+.photo-zone{border:2px dashed rgba(201,147,58,.35);border-radius:14px;overflow:hidden;position:relative;cursor:pointer;transition:all .2s;}
+.photo-zone:hover{border-color:var(--gl);background:rgba(201,147,58,.05);}
+.photo-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-add{padding:18px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;}
+.photo-circle{width:64px;height:64px;border-radius:50%;background:rgba(201,147,58,.1);border:2px dashed rgba(201,147,58,.45);display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.photo-add-title{font-size:.92rem;color:var(--gl);}
+.photo-add-sub{font-size:.72rem;color:rgba(253,246,227,.4);font-style:italic;}
+.photo-added{padding:14px;display:none;flex-direction:column;align-items:center;gap:6px;}
+.photo-thumb{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold);box-shadow:0 0 12px rgba(201,147,58,.4);}
+.photo-change{font-size:.68rem;color:rgba(253,246,227,.4);font-style:italic;}
+
+/* Sacred quotes scroll */
+.sq-section{margin-bottom:12px;}
+.sq-book{font-size:.62rem;text-transform:uppercase;letter-spacing:.13em;color:var(--sl);margin-bottom:7px;padding:0 16px;display:flex;align-items:center;gap:7px;}
+.sq-book::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,147,58,.25),transparent);}
+.sq-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 16px 8px;scrollbar-width:none;scroll-snap-type:x mandatory;}
+.sq-scroll::-webkit-scrollbar{display:none;}
+.dq{flex-shrink:0;width:138px;background:rgba(201,147,58,.05);border:1px solid rgba(201,147,58,.17);border-radius:11px;padding:11px 9px;cursor:pointer;transition:all .2s;text-align:center;scroll-snap-align:start;}
+.dq:hover,.dq.sel{background:rgba(201,147,58,.14);border-color:var(--gl);box-shadow:0 0 10px rgba(240,192,96,.18);}
+.dq-em{font-size:1.1rem;margin-bottom:4px;display:block;}
+.dq-title{font-size:.7rem;color:var(--gl);font-weight:600;margin-bottom:3px;line-height:1.3;}
+.dq-txt{font-size:.64rem;color:rgba(253,246,227,.55);line-height:1.45;font-style:italic;}
+
+/* Theme picker buttons */
+.theme-btn{flex:1;padding:9px 6px;border:1.5px solid rgba(201,147,58,.3);border-radius:10px;background:rgba(255,255,255,.03);font-family:'Cormorant Garamond',serif;font-size:.85rem;color:rgba(253,246,227,.6);cursor:pointer;transition:all .2s;letter-spacing:.04em;}
+.theme-btn.on{background:rgba(201,147,58,.18);border-color:var(--gl);color:var(--gl);font-weight:600;}
+.theme-btn:hover{border-color:var(--gl);color:var(--gl);}
+.story-canvas-wrap{border-radius:14px;overflow:hidden;line-height:0;border:1px solid var(--border);margin-bottom:12px;background:#000;display:flex;justify-content:center;}
+#story-canvas{width:100%;max-width:320px;height:auto;display:block;}
+
+/* Sticky share bar */
+.sticky-share{position:sticky;bottom:0;background:linear-gradient(0deg,rgba(10,4,0,1) 70%,transparent);padding:12px 16px 16px;display:none;z-index:10;}
+.sticky-share.show{display:block;}
+
+/* Toast */
+.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:rgba(37,211,102,.95);color:#fff;border-radius:30px;padding:8px 18px;font-size:.82rem;font-family:'Cormorant Garamond',serif;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+/* Footer */
+footer{text-align:center;padding:20px 16px;border-top:1px solid rgba(201,147,58,.08);}
+footer p{font-size:.75rem;color:rgba(253,246,227,.25);font-style:italic;line-height:1.7;}
+
+/* Onboarding splash */
+.splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:var(--deep);cursor:default;}
+.splash-om{font-size:4rem;color:var(--gl);animation:ompulse 3s ease-in-out infinite;margin-bottom:14px;}
+.splash h1{font-size:1.8rem;font-weight:300;color:var(--gl);margin-bottom:5px;}
+.splash h1 em{font-style:italic;color:var(--sl);}
+.splash-sk{font-family:'Noto Sans Devanagari',sans-serif;font-size:.8rem;color:rgba(201,147,58,.6);letter-spacing:.12em;margin-bottom:10px;}
+.splash p{font-size:.9rem;color:rgba(253,246,227,.55);font-style:italic;line-height:1.65;margin-bottom:28px;max-width:300px;}
+.splash-btn{position:relative;z-index:10000;padding:16px 44px;background:linear-gradient(135deg,var(--gold),var(--saffron));border:none;border-radius:40px;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1A0A00;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:all .3s;-webkit-tap-highlight-color:transparent;}
+.splash-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,147,58,.4);}
+.splash-btn:active{transform:scale(.97);}
+.splash.hide{animation:splashOut .5s ease forwards;}
+@keyframes splashOut{to{opacity:0;transform:scale(1.03);pointer-events:none;}}
+</style>
+</head>
+<body>
+
+<!-- ── SPLASH / ONBOARDING ── -->
+<div class="splash" id="splash">
+  <div class="splash-om">ॐ</div>
+  <h1>Find <em>Myself</em></h1>
+  <div class="splash-sk">अपना दिव्य अर्थ खोजें</div>
+  <p>Every soul is God's most intentional creation.<br>Upload your photo — discover the sacred flower, the divine meaning, and the message God has for you.</p>
+  <button class="splash-btn" id="splash-btn">🪷 Begin Your Journey</button>
+</div>
+
+<!-- ── MANDALA ── -->
+<div class="mandala-wrap">
+  <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="200" r="190" stroke="#C9933A" stroke-width=".5"/>
+    <circle cx="200" cy="200" r="155" stroke="#C9933A" stroke-width=".5"/>
+    <circle cx="200" cy="200" r="120" stroke="#C9933A" stroke-width=".5"/>
+    <circle cx="200" cy="200" r="85" stroke="#C9933A" stroke-width=".5"/>
+    <circle cx="200" cy="200" r="50" stroke="#C9933A" stroke-width=".5"/>
+    <g stroke="#C9933A" stroke-width=".4">
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none"/>
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none" transform="rotate(45 200 200)"/>
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none" transform="rotate(90 200 200)"/>
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none" transform="rotate(135 200 200)"/>
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none" transform="rotate(180 200 200)"/>
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none" transform="rotate(225 200 200)"/>
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none" transform="rotate(270 200 200)"/>
+      <ellipse cx="200" cy="122" rx="13" ry="38" fill="none" transform="rotate(315 200 200)"/>
+    </g>
+    <line x1="200" y1="5" x2="200" y2="395" stroke="#C9933A" stroke-width=".3"/>
+    <line x1="5" y1="200" x2="395" y2="200" stroke="#C9933A" stroke-width=".3"/>
+    <line x1="57" y1="57" x2="343" y2="343" stroke="#C9933A" stroke-width=".3"/>
+    <line x1="343" y1="57" x2="57" y2="343" stroke="#C9933A" stroke-width=".3"/>
+    <g stroke="#FF9A3C" stroke-width=".35" fill="none">
+      <ellipse cx="200" cy="16" rx="9" ry="20"/><ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(30 200 200)"/>
+      <ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(60 200 200)"/><ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(90 200 200)"/>
+      <ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(120 200 200)"/><ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(150 200 200)"/>
+      <ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(180 200 200)"/><ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(210 200 200)"/>
+      <ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(240 200 200)"/><ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(270 200 200)"/>
+      <ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(300 200 200)"/><ellipse cx="200" cy="16" rx="9" ry="20" transform="rotate(330 200 200)"/>
+    </g>
+  </svg>
+</div>
+
+<!-- Petals -->
+<div class="petal" style="left:6%;animation-duration:11s;animation-delay:0s;">🌸</div>
+<div class="petal" style="left:22%;animation-duration:14s;animation-delay:3s;">🪷</div>
+<div class="petal" style="left:50%;animation-duration:10s;animation-delay:1.5s;">✿</div>
+<div class="petal" style="left:74%;animation-duration:17s;animation-delay:5s;">🌺</div>
+<div class="petal" style="left:88%;animation-duration:13s;animation-delay:7.5s;">🌼</div>
+
+<!-- ── APP SHELL ── -->
+<div class="app-shell" id="app-shell" style="display:none;">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-logo">
+      <span style="font-size:1rem;color:var(--gl);">सृष्टि</span>
+      <span>Find Myself</span>
+    </div>
+    <div class="top-right">
+      <select class="lang-select" id="lang-select" onchange="setLang(this.value)">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+        <option value="ta">தமிழ்</option>
+        <option value="te">తెలుగు</option>
+        <option value="bn">বাংলা</option>
+        <option value="mr">मराठी</option>
+        <option value="gu">ગુજરાતી</option>
+        <option value="kn">ಕನ್ನಡ</option>
+        <option value="ml">മലയാളം</option>
+        <option value="pa">ਪੰਜਾਬੀ</option>
+      </select>
+      <div class="music-btn" id="music-btn" onclick="toggleMusic()">🎵</div>
+    </div>
+  </div>
+
+  <!-- SCROLL CONTENT -->
+  <div class="scroll-content" id="scroll-content">
+
+    <!-- ══ FIND SELF SECTION ══ -->
+    <div class="sec on" id="sec-findself">
+
+      <div class="hero" style="position:relative;z-index:2;">
+        <span class="om-sym">ॐ</span>
+        <h1 id="h-title">Find <em>Myself</em></h1>
+        <div class="hero-sk">अपना दिव्य अर्थ खोजें</div>
+        <p id="h-sub">Every soul is God's most intentional creation. Discover the divine meaning placed within you.</p>
+      </div>
+
+      <div class="div"><span>❈</span></div>
+
+      <!-- STEP 1: NAME — required, validated -->
+      <div id="step-name">
+        <div class="card">
+          <div class="card-label" id="nc-title">✦ What is your name, dear soul?</div>
+          <p style="font-size:.82rem;color:rgba(253,246,227,.45);font-style:italic;margin-bottom:14px;line-height:1.55;" id="nc-sub">So God may speak to you directly — as He has always known you.</p>
+          <input class="inp" id="name-input" type="text" placeholder="Enter your name…" maxlength="30" oninput="clearNameError()" onkeydown="if(event.key==='Enter')goToUpload()">
+          <div class="inp-err-msg" id="name-err" id="name-err">🙏 Please enter your name to continue</div>
+          <button class="btn-primary" onclick="goToUpload()" id="name-btn">🪷 Continue</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: UPLOAD -->
+      <div id="step-upload" style="display:none;">
+        <div class="card">
+          <div class="card-label" id="up-label">✦ Upload your photo</div>
+          <p style="font-size:.8rem;color:rgba(253,246,227,.4);font-style:italic;margin-bottom:12px;line-height:1.5;" id="up-sub">A portrait or selfie — God will reveal the sacred flower within you</p>
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" accept="image/*" id="file-input" onchange="handleUpload(event)">
+            <div class="uz-inner" id="uz-add">
+              <div class="uz-circle" style="font-size:2rem;color:rgba(240,192,96,.7);letter-spacing:0;">＋</div>
+              <div class="uz-title" id="up-greet" style="font-size:.92rem;color:rgba(253,246,227,.5);font-style:italic;font-weight:300;"></div>
+              <div class="uz-sub" id="up-title-txt" style="font-size:1.05rem;color:var(--gl);font-weight:400;font-style:normal;">Tap to choose your photo</div>
+              <div class="uz-note" id="up-note">👤 Human portraits only</div>
+            </div>
+            <div class="uz-added" id="uz-added">
+              <img class="uz-preview" id="uz-preview-img" src="" alt="">
+              <div class="uz-change">Tap to change photo</div>
+            </div>
+          </div>
+          <button class="btn-secondary" onclick="backToName()" style="margin-top:10px;">← Back</button>
+        </div>
+      </div>
+
+      <!-- ERROR -->
+      <div class="err-box" id="err-box">
+        <span id="err-msg">🙏 Please upload a human portrait — a photo of yourself.</span>
+        <br><button onclick="dismissErr()">Try Again</button>
+      </div>
+
+      <!-- LOADING -->
+      <div class="loading" id="loading">
+        <svg class="chakra" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="28" stroke="rgba(201,147,58,.2)" stroke-width="2"/>
+          <path d="M32 4 A28 28 0 0 1 60 32" stroke="#C9933A" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="32" cy="32" r="6" fill="none" stroke="#FF9A3C" stroke-width="1.5"/>
+          <line x1="32" y1="26" x2="32" y2="18" stroke="#C9933A" stroke-width="1.2"/>
+          <line x1="32" y1="38" x2="32" y2="46" stroke="#C9933A" stroke-width="1.2"/>
+          <line x1="26" y1="32" x2="18" y2="32" stroke="#C9933A" stroke-width="1.2"/>
+          <line x1="38" y1="32" x2="46" y2="32" stroke="#C9933A" stroke-width="1.2"/>
+          <line x1="27.8" y1="27.8" x2="22.1" y2="22.1" stroke="#C9933A" stroke-width="1.2"/>
+          <line x1="36.2" y1="36.2" x2="41.9" y2="41.9" stroke="#C9933A" stroke-width="1.2"/>
+          <line x1="36.2" y1="27.8" x2="41.9" y2="22.1" stroke="#C9933A" stroke-width="1.2"/>
+          <line x1="27.8" y1="36.2" x2="22.1" y2="41.9" stroke="#C9933A" stroke-width="1.2"/>
+        </svg>
+        <p id="load-msg">Reading God's creation…</p>
+        <div class="l-sk">ईश्वर की दृष्टि से देख रहे हैं</div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="result" id="result">
+        <!-- Image -->
+        <div class="result-img-wrap">
+          <img class="result-img" id="r-img" src="" alt="">
+          <div class="result-img-ov"></div>
+          <div class="result-name-chip" id="r-name-chip"></div>
+          <div class="flower-badge">
+            <span class="fb-em" id="r-fe">🪷</span>
+            <span class="fb-nm" id="r-fn">Lotus</span>
+          </div>
+        </div>
+
+        <!-- Shloka -->
+        <div class="shloka-box">
+          <div class="sh-text" id="r-shloka"></div>
+          <div class="sh-src" id="r-src"></div>
+        </div>
+
+        <!-- Flower meaning -->
+        <div class="sec-lbl" id="r-lbl-flower">✦ Your Sacred Flower</div>
+        <div class="big-title" id="r-title"></div>
+        <div class="sk-title" id="r-sub"></div>
+        <div class="body-txt" id="r-meaning"></div>
+
+        <!-- Name meaning -->
+        <div class="card" style="margin:0 0 12px;">
+          <div class="card-label" id="r-lbl-name">✦ The Sacred Meaning of Your Name</div>
+          <div class="nb-origin" id="r-name-origin"></div>
+          <div class="nb-meaning" id="r-name-meaning"></div>
+        </div>
+
+        <!-- Face reading -->
+        <div class="face-box">
+          <div class="fb-lbl" id="r-lbl-face">✦ Samudrik Shastra — Your Face Reading</div>
+          <div class="fb-text" id="r-face"></div>
+        </div>
+
+        <!-- Pillars -->
+        <div class="pillars" id="r-pillars"></div>
+
+        <!-- Questions -->
+        <div id="r-questions"></div>
+
+        <!-- God's message -->
+        <div class="gm-box">
+          <div class="gm-lbl">✦ God's Message to <span id="r-gm-name"></span> ✦</div>
+          <div class="gm-text" id="r-gm"></div>
+        </div>
+
+        <!-- Share card preview -->
+        <div class="card-label" id="r-lbl-share" style="text-align:center;margin-bottom:8px;">✦ Share Your Sacred Card ✦</div>
+        <div class="share-preview-wrap">
+          <canvas id="findself-share-canvas"></canvas>
+        </div>
+        <div class="btn-grid">
+          <button class="btn-wa" onclick="shareFindSelf()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span>WhatsApp</span>
+          </button>
+          <button class="btn-dl" onclick="downloadFindSelf()">⬇️ <span id="r-btn-save">Save</span></button>
+        </div>
+        <button class="btn-secondary" onclick="resetFindSelf()" style="margin-top:8px;" id="r-btn-another">🪷 Reveal Another Creation</button>
+      </div>
+
+      <!-- Wisdom -->
+      <div class="wisdom-section" id="wisdom-section" style="display:none;">
+        <div class="wisdom-title" id="w-title">Sacred Wisdom from Hindu Scriptures</div>
+        <div class="wc"><div class="wc-book">Bhagavad Gita · 10:20</div><div class="wc-text">"I am the Self, seated in the hearts of all creatures. I am the beginning, the middle and the end of all beings."</div><div class="wc-meaning">— God lives in every human being. Your body is His temple. Your breath is His gift.</div></div>
+        <div class="wc"><div class="wc-book">Bhagavad Gita · 7:9</div><div class="wc-text">"I am the pure fragrance of the earth and the brightness in fire. I am the life in all existences."</div><div class="wc-meaning">— Every heartbeat, every breath is God expressing Himself through you.</div></div>
+        <div class="wc"><div class="wc-book">Chandogya Upanishad · 6.8.7</div><div class="wc-text">"Tat tvam asi" — That Thou Art.</div><div class="wc-meaning">— You are not separate from God. The Divine that created all things also created you.</div></div>
+        <div class="wc"><div class="wc-book">Rigveda · 1.164.46</div><div class="wc-text">"Ekam sad viprā bahudhā vadanti" — Truth is One; the wise call it by many names.</div><div class="wc-meaning">— All paths lead to the same God. Your name, face, flower — all are His fingerprints.</div></div>
+        <div class="wc"><div class="wc-book">Samudrik Shastra</div><div class="wc-text">"The body is a map of the soul's journey. Every feature placed by the Divine reveals the purpose of this incarnation."</div><div class="wc-meaning">— Your face is not random. It was given by God as a reflection of your inner divine quality.</div></div>
+        <div class="wc"><div class="wc-book">Vishnu Purana · 1.12</div><div class="wc-text">"Every being that lives, every flower that blooms, every name spoken — all emerge from the one Divine consciousness."</div><div class="wc-meaning">— Your existence is not an accident. It is God's most precise and intentional creation.</div></div>
+      </div>
+
+      <footer>
+        <p>ॐ Discover the divine meaning placed within you.<br><em>"Vasudhaiva Kutumbakam"</em> — The whole world is one family.<br>shyam0412.github.io/creation-of-god</p>
+      </footer>
+
+    </div><!-- /sec-findself -->
+
+    <!-- ══ CREATE STORY SECTION ══ -->
+    <div class="sec" id="sec-story">
+
+      <div class="story-hero">
+        <span class="om-sym" style="font-size:2rem;">ॐ</span>
+        <h2>Create Your <em>Divine Story</em></h2>
+        <p>Your photo · Your words · God's background<br>Share your sacred card 🌸</p>
+      </div>
+
+      <div class="fl-row">
+        <span class="afl">🌸</span><span class="afl">🪷</span><span class="afl">🌺</span>
+        <span class="afl">🌼</span><span class="afl">🌹</span><span class="afl">✿</span>
+        <span class="afl">🌸</span><span class="afl">🪻</span><span class="afl">🌷</span>
+      </div>
+
+      <!-- BG Picker — solid colors + theme selection -->
+      <div style="padding:0 0 8px;">
+        <div class="bp-label">✦ Choose Your Divine Background ✦</div>
+        <div class="bp-scroll" id="bp-scroll">
+          <div class="bp-opt bg0 sel" onclick="pickBg(0,this)"><div class="bp-name">Cosmic</div></div>
+          <div class="bp-opt bg1" onclick="pickBg(1,this)"><div class="bp-name">Sacred</div></div>
+          <div class="bp-opt bg2" onclick="pickBg(2,this)"><div class="bp-name">Divine</div></div>
+          <div class="bp-opt bg3" onclick="pickBg(3,this)"><div class="bp-name">Saffron</div></div>
+          <div class="bp-opt bg4" onclick="pickBg(4,this)"><div class="bp-name">Ocean</div></div>
+          <div class="bp-opt bg5" onclick="pickBg(5,this)"><div class="bp-name">Lotus</div></div>
+          <div class="bp-opt bg6" onclick="pickBg(6,this)"><div class="bp-name">Forest</div></div>
+          <div class="bp-opt bg7" onclick="pickBg(7,this)"><div class="bp-name">Golden</div></div>
+        </div>
+      </div>
+
+      <!-- Fix 5: Card Theme picker -->
+      <div style="padding:0 16px 14px;">
+        <div class="bp-label" style="margin-bottom:8px;">✦ Card Style ✦</div>
+        <div style="display:flex;gap:8px;">
+          <button class="theme-btn on" id="theme-full" onclick="pickTheme('full',this)">ॐ + Flowers</button>
+          <button class="theme-btn" id="theme-om" onclick="pickTheme('om',this)">ॐ Only</button>
+          <button class="theme-btn" id="theme-clean" onclick="pickTheme('clean',this)">Clean</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div style="padding:0 16px;">
+
+        <!-- Photo upload -->
+        <div class="card" style="margin:0 0 12px;padding:14px;">
+          <div class="card-label">✦ Your Sacred Photo (optional)</div>
+          <div class="photo-zone" id="photo-zone">
+            <input type="file" accept="image/*" onchange="loadStoryPhoto(event)">
+            <div class="photo-add" id="photo-add">
+              <div class="photo-circle">＋</div>
+              <div class="photo-add-title">Add Your Photo</div>
+              <div class="photo-add-sub">Tap to choose from your gallery</div>
+            </div>
+            <div class="photo-added" id="photo-added">
+              <img class="photo-thumb" id="photo-thumb" src="" alt="">
+              <div class="photo-change">Tap to change photo</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Name -->
+        <div class="card" style="margin:0 0 12px;padding:14px;">
+          <div class="card-label">✦ Your Name on the Card</div>
+          <input type="text" class="inp" id="cs-name" placeholder="Your name…" maxlength="25" oninput="livePreview()" style="text-align:left;border-radius:10px;padding:10px 14px;">
+        </div>
+
+        <!-- Quote -->
+        <div class="card" style="margin:0 0 12px;padding:14px;">
+          <div class="card-label">✦ Your Personal Message</div>
+          <textarea class="textarea-inp" id="cs-quote" rows="3" placeholder="Write your divine thought… e.g. 'I am God's creation, blooming with purpose'" oninput="livePreview()"></textarea>
+        </div>
+
+        <!-- Sacred quotes by scripture -->
+        <div class="card" style="margin:0 0 12px;padding:14px 0 6px;">
+          <div class="card-label" style="padding:0 16px;">✦ Or Pick a Sacred Quote</div>
+
+          <div class="sq-section">
+            <div class="sq-book">📖 Bhagavad Gita</div>
+            <div class="sq-scroll">
+              <div class="dq" onclick="pickQ(this,'I am not the body. I am the eternal soul — God\'s most sacred creation. 🪷 — Bhagavad Gita')"><span class="dq-em">🪷</span><div class="dq-title">Eternal Soul</div><div class="dq-txt">I am not the body. I am the eternal soul.</div></div>
+              <div class="dq" onclick="pickQ(this,'Tat tvam asi — That Thou Art. I am not separate from the Divine. ✨ — Bhagavad Gita')"><span class="dq-em">✨</span><div class="dq-title">Tat Tvam Asi</div><div class="dq-txt">I am not separate from the Divine.</div></div>
+              <div class="dq" onclick="pickQ(this,'Whatever I do, eat, give — I offer it all to God. My life is sacred service. 🌺 — Bhagavad Gita 9:27')"><span class="dq-em">🌺</span><div class="dq-title">Sacred Offering</div><div class="dq-txt">Every action offered to God is worship.</div></div>
+              <div class="dq" onclick="pickQ(this,'Never was there a time I did not exist. The soul is eternal, birthless, deathless. ॐ — Bhagavad Gita 2:20')"><span class="dq-em">ॐ</span><div class="dq-title">Eternal Being</div><div class="dq-txt">The soul is birthless and deathless.</div></div>
+              <div class="dq" onclick="pickQ(this,'Act without attachment to reward. Do your duty — the rest belongs to God. 🌸 — Bhagavad Gita 2:47')"><span class="dq-em">🌸</span><div class="dq-title">Nishkama Karma</div><div class="dq-txt">Act without attachment to reward.</div></div>
+            </div>
+          </div>
+
+          <div class="sq-section">
+            <div class="sq-book">🏹 Ramayana</div>
+            <div class="sq-scroll">
+              <div class="dq" onclick="pickQ(this,'Wherever there is righteousness, God is present. I choose to walk in dharma. 🙏 — Valmiki Ramayana')"><span class="dq-em">🙏</span><div class="dq-title">Dharma Path</div><div class="dq-txt">Where there is righteousness, God is present.</div></div>
+              <div class="dq" onclick="pickQ(this,'Ram naam satya hai — The name of God is eternal truth. I rest in that truth. ॐ राम')"><span class="dq-em">🌅</span><div class="dq-title">Ram Naam</div><div class="dq-txt">God's name is eternal truth.</div></div>
+              <div class="dq" onclick="pickQ(this,'Love without condition is the highest form of worship. — Inspired by Hanuman\'s devotion 🔥')"><span class="dq-em">🔥</span><div class="dq-title">Pure Devotion</div><div class="dq-txt">Unconditional love is the highest worship.</div></div>
+              <div class="dq" onclick="pickQ(this,'Even in exile, the soul that holds God in its heart is never truly homeless. 🌿 — Ramayana')"><span class="dq-em">🌿</span><div class="dq-title">Inner Home</div><div class="dq-txt">God in heart means never homeless.</div></div>
+            </div>
+          </div>
+
+          <div class="sq-section">
+            <div class="sq-book">📿 Vedas & Upanishads</div>
+            <div class="sq-scroll">
+              <div class="dq" onclick="pickQ(this,'Aham Brahmasmi — I am Brahman. The infinite divine lives within me. 🌌 — Brihadaranyaka Upanishad')"><span class="dq-em">🌌</span><div class="dq-title">Aham Brahmasmi</div><div class="dq-txt">I am Brahman. The infinite is within me.</div></div>
+              <div class="dq" onclick="pickQ(this,'Vasudhaiva Kutumbakam — The whole world is my family. I walk in love. 🌍 — Maha Upanishad')"><span class="dq-em">🌍</span><div class="dq-title">One Family</div><div class="dq-txt">The whole world is one family.</div></div>
+              <div class="dq" onclick="pickQ(this,'Satyam Shivam Sundaram — Truth. Goodness. Beauty. This is God\'s nature — and mine. ☀️')"><span class="dq-em">☀️</span><div class="dq-title">Divine Nature</div><div class="dq-txt">Truth, Goodness, Beauty — God's nature.</div></div>
+              <div class="dq" onclick="pickQ(this,'Sarve Bhavantu Sukhinah — May all beings everywhere be happy and free. 🕊️ — Brihadaranyaka Upanishad')"><span class="dq-em">🕊️</span><div class="dq-title">Universal Prayer</div><div class="dq-txt">May all beings be happy and free.</div></div>
+              <div class="dq" onclick="pickQ(this,'The God who made the stars also made me. I am part of His divine masterpiece. ✨ — Rigveda')"><span class="dq-em">✨</span><div class="dq-title">God\'s Masterpiece</div><div class="dq-txt">I am part of God\'s divine masterpiece.</div></div>
+            </div>
+          </div>
+
+          <div class="sq-section">
+            <div class="sq-book">☸️ Buddhism — Dhammapada</div>
+            <div class="sq-scroll">
+              <div class="dq" onclick="pickQ(this,'The mind is everything. What I think, I become. I choose peace and love. ☸️ — Dhammapada')"><span class="dq-em">☸️</span><div class="dq-title">Mind is All</div><div class="dq-txt">What you think, you become.</div></div>
+              <div class="dq" onclick="pickQ(this,'Within myself I find a refuge. The light I seek is already here, within. 🌸 — Buddha')"><span class="dq-em">🌸</span><div class="dq-title">Inner Refuge</div><div class="dq-txt">The light you seek is already within.</div></div>
+              <div class="dq" onclick="pickQ(this,'Peace comes from within. Do not seek it without. — Buddha 🕊️')"><span class="dq-em">🕊️</span><div class="dq-title">Inner Peace</div><div class="dq-txt">Peace comes from within, not without.</div></div>
+              <div class="dq" onclick="pickQ(this,'Like a beautiful flower with fragrance — so is a compassionate word. 🌺 — Dhammapada')"><span class="dq-em">🌺</span><div class="dq-title">Compassion</div><div class="dq-txt">A kind word is like a fragrant flower.</div></div>
+            </div>
+          </div>
+
+          <div class="sq-section">
+            <div class="sq-book">🔷 Jainism — Agamas</div>
+            <div class="sq-scroll">
+              <div class="dq" onclick="pickQ(this,'Parasparopagraho Jivanam — All life is mutually supportive. I honor every soul. 🌿 — Tattvartha Sutra')"><span class="dq-em">🌿</span><div class="dq-title">Interdependence</div><div class="dq-txt">All life is mutually supportive.</div></div>
+              <div class="dq" onclick="pickQ(this,'Ahimsa Paramo Dharma — Non-violence is the highest religion. I walk gently on this earth. ✋')"><span class="dq-em">✋</span><div class="dq-title">Ahimsa</div><div class="dq-txt">Non-violence is the highest dharma.</div></div>
+              <div class="dq" onclick="pickQ(this,'The soul is pure, luminous and perfect — capable of infinite bliss. 💎 — Jain Agamas')"><span class="dq-em">💎</span><div class="dq-title">Pure Soul</div><div class="dq-txt">The soul is pure, perfect, infinite.</div></div>
+            </div>
+          </div>
+
+          <div class="sq-section">
+            <div class="sq-book">🕎 Sikhism — Guru Granth Sahib</div>
+            <div class="sq-scroll">
+              <div class="dq" onclick="pickQ(this,'Ik Onkar — There is only One God. He lives in everything and in me. 🌟 — Guru Granth Sahib')"><span class="dq-em">🌟</span><div class="dq-title">Ik Onkar</div><div class="dq-txt">One God lives in everything, in me.</div></div>
+              <div class="dq" onclick="pickQ(this,'God who created this universe also created me. I am His most beloved. 💛 — Guru Granth Sahib')"><span class="dq-em">💛</span><div class="dq-title">God\'s Beloved</div><div class="dq-txt">I am God\'s most beloved creation.</div></div>
+              <div class="dq" onclick="pickQ(this,'Speak truth, hear truth. God lives in every honest and loving heart. 📿 — Guru Granth Sahib')"><span class="dq-em">📿</span><div class="dq-title">Truthful Heart</div><div class="dq-txt">God lives in every honest heart.</div></div>
+            </div>
+          </div>
+
+        </div><!-- end quotes card -->
+
+        <!-- Generate -->
+        <button class="btn-primary" onclick="generateStory()" style="width:100%;margin:0 0 12px;">🌸 Generate My Divine Story Card</button>
+
+        <!-- Story preview -->
+        <div id="story-preview" style="display:none;">
+          <div class="card-label" style="text-align:center;margin-bottom:8px;">✦ Your Sacred Story Card ✦</div>
+          <div class="story-canvas-wrap">
+            <canvas id="story-canvas"></canvas>
+          </div>
+          <div class="btn-grid">
+            <button class="btn-wa" onclick="shareStory()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <span style="color:#fff;">Share WhatsApp</span>
+            </button>
+            <button class="btn-dl" onclick="downloadStory()">⬇️ Save Card</button>
+          </div>
+        </div>
+
+        <!-- Sticky share - REMOVED duplicate, only keep inline buttons above -->
+
+      </div><!-- /padding -->
+    </div><!-- /sec-story -->
+
+  </div><!-- /scroll-content -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="bnav-btn on" id="bn-findself" onclick="switchSec('findself')">
+      <span class="bi">🪷</span><span class="bl">Find Self</span>
+    </button>
+    <button class="bnav-btn" id="bn-story" onclick="switchSec('story')">
+      <span class="bi">✨</span><span class="bl">Create Story</span>
+    </button>
+  </div>
+
+</div><!-- /app-shell -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+// LANGUAGE DATA
+// ══════════════════════════════════════════════════
+const BOOK_LABELS={
+  en:{gita:'📖 Bhagavad Gita',ram:'🏹 Ramayana',vedas:'📿 Vedas & Upanishads',buddha:'☸️ Buddhism — Dhammapada',jain:'🔷 Jainism — Agamas',sikh:'🕎 Sikhism — Guru Granth Sahib',pick:'✦ Or Pick a Sacred Quote'},
+  hi:{gita:'📖 भगवद् गीता',ram:'🏹 रामायण',vedas:'📿 वेद और उपनिषद',buddha:'☸️ बौद्ध धर्म — धम्मपद',jain:'🔷 जैन धर्म — आगम',sikh:'🕎 सिख धर्म — गुरु ग्रंथ साहिब',pick:'✦ या एक पवित्र उद्धरण चुनें'},
+  ta:{gita:'📖 பகவத் கீதை',ram:'🏹 இராமாயணம்',vedas:'📿 வேதங்கள் & உபநிஷத்துகள்',buddha:'☸️ பௌத்தம் — தம்மபதம்',jain:'🔷 ஜைனம் — ஆகமம்',sikh:'🕎 சீக்கியம் — குரு கிரந்த் சாகிப்',pick:'✦ அல்லது ஒரு புனித மேற்கோள் தேர்வு செய்யுங்கள்'},
+  te:{gita:'📖 భగవద్గీత',ram:'🏹 రామాయణం',vedas:'📿 వేదాలు & ఉపనిషత్తులు',buddha:'☸️ బౌద్ధం — ధమ్మపద',jain:'🔷 జైనిజం — ఆగమాలు',sikh:'🕎 సిక్కు మతం — గురు గ్రంథ్ సాహిబ్',pick:'✦ లేదా పవిత్ర కోట్ ఎంచుకోండి'},
+  bn:{gita:'📖 ভগবদ্ গীতা',ram:'🏹 রামায়ণ',vedas:'📿 বেদ ও উপনিষদ',buddha:'☸️ বৌদ্ধ ধর্ম — ধম্মপদ',jain:'🔷 জৈন ধর্ম — আগম',sikh:'🕎 শিখ ধর্ম — গুরু গ্রন্থ সাহিব',pick:'✦ অথবা একটি পবিত্র উক্তি বেছে নিন'},
+  mr:{gita:'📖 भगवद्गीता',ram:'🏹 रामायण',vedas:'📿 वेद आणि उपनिषदे',buddha:'☸️ बौद्ध धर्म — धम्मपद',jain:'🔷 जैन धर्म — आगम',sikh:'🕎 शीख धर्म — गुरु ग्रंथ साहिब',pick:'✦ किंवा एक पवित्र उद्धरण निवडा'},
+  gu:{gita:'📖 ભગવદ્ ગીતા',ram:'🏹 રામાયણ',vedas:'📿 વેદ અને ઉપનિષદ',buddha:'☸️ બૌદ્ધ ધર્મ — ધમ્મપદ',jain:'🔷 જૈન ધર્મ — આગમ',sikh:'🕎 શીખ ધર્મ — ગુરુ ગ્રંથ સાહિબ',pick:'✦ અથવા પવિત્ર અવતરણ પસંદ કરો'},
+  kn:{gita:'📖 ಭಗವದ್ ಗೀತೆ',ram:'🏹 ರಾಮಾಯಣ',vedas:'📿 ವೇದಗಳು & ಉಪನಿಷತ್ತುಗಳು',buddha:'☸️ ಬೌದ್ಧ ಧರ್ಮ — ಧಮ್ಮಪದ',jain:'🔷 ಜೈನ ಧರ್ಮ — ಆಗಮ',sikh:'🕎 ಸಿಖ್ ಧರ್ಮ — ಗುರು ಗ್ರಂಥ ಸಾಹಿಬ್',pick:'✦ ಅಥವಾ ಪವಿತ್ರ ಉಲ್ಲೇಖ ಆರಿಸಿ'},
+  ml:{gita:'📖 ഭഗവദ് ഗീത',ram:'🏹 രാമായണം',vedas:'📿 വേദങ്ങൾ & ഉപനിഷത്തുകൾ',buddha:'☸️ ബുദ്ധമതം — ദമ്മപദ',jain:'🔷 ജൈനമതം — ആഗമം',sikh:'🕎 സിഖ് മതം — ഗുരു ഗ്രന്ഥ് സാഹിബ്',pick:'✦ അല്ലെങ്കിൽ ഒരു പവിത്ര ഉദ്ധരണി തിരഞ്ഞെടുക്കൂ'},
+  pa:{gita:'📖 ਭਗਵਦ ਗੀਤਾ',ram:'🏹 ਰਾਮਾਇਣ',vedas:'📿 ਵੇਦ ਅਤੇ ਉਪਨਿਸ਼ਦ',buddha:'☸️ ਬੋਧ ਧਰਮ — ਧੰਮਪਦ',jain:'🔷 ਜੈਨ ਧਰਮ — ਆਗਮ',sikh:'🕎 ਸਿੱਖ ਧਰਮ — ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ',pick:'✦ ਜਾਂ ਇੱਕ ਪਵਿੱਤਰ ਹਵਾਲਾ ਚੁਣੋ'},
+};
+const LANGS={
+  en:{h_title:'Find §Myself§',h_sub:'Every soul is God\'s most intentional creation. Discover the divine meaning placed within you.',nc_title:'✦ What is your name, dear soul?',nc_sub:'So God may speak to you directly — as He has always known you.',name_ph:'Enter your name…',name_btn:'🪷 Continue',up_label:'✦ Upload your photo',up_sub:'A portrait or selfie — God will reveal the sacred flower within you',up_note:'👤 Human portraits only',up_greet:' your divine flower awaits…',load_msg:'Reading God\'s creation…',err_msg:'🙏 Please upload a human portrait — a photo of yourself. This reading is for God\'s most divine creation: the human soul.',lbl_flower:'✦ Your Sacred Flower',lbl_name:'✦ The Sacred Meaning of Your Name',lbl_face:'✦ Samudrik Shastra — Your Face Reading',gm_lbl:'God\'s Message',lbl_share:'✦ Share Your Sacred Card ✦',btn_wa:'WhatsApp',btn_save:'Save',btn_another:'🪷 Reveal Another Creation',w_title:'Sacred Wisdom from Hindu Scriptures',q1:'Why does {name} exist?',q2:'What is the meaning of your creation?',q3:'Where do you belong?'},
+  hi:{h_title:'खुद को §खोजें§',h_sub:'हर आत्मा ईश्वर की सबसे सोची-समझी रचना है। अपने भीतर रखे दिव्य अर्थ को खोजें।',nc_title:'✦ आपका नाम क्या है, प्रिय आत्मा?',nc_sub:'ताकि ईश्वर आपसे सीधे बात कर सकें।',name_ph:'अपना नाम लिखें…',name_btn:'🪷 आगे बढ़ें',up_label:'✦ अपनी फोटो अपलोड करें',up_sub:'एक सेल्फी — ईश्वर आपके भीतर का पवित्र फूल प्रकट करेंगे',up_note:'👤 केवल मानव फोटो',up_greet:' आपका दिव्य फूल प्रतीक्षा में है…',load_msg:'ईश्वर की सृष्टि पढ़ी जा रही है…',err_msg:'🙏 कृपया अपनी मानव फोटो अपलोड करें।',lbl_flower:'✦ आपका पवित्र फूल',lbl_name:'✦ आपके नाम का पवित्र अर्थ',lbl_face:'✦ सामुद्रिक शास्त्र',gm_lbl:'ईश्वर का संदेश',lbl_share:'✦ अपना दिव्य कार्ड साझा करें ✦',btn_wa:'WhatsApp',btn_save:'सहेजें',btn_another:'🪷 एक और सृष्टि देखें',w_title:'हिंदू शास्त्रों से दिव्य ज्ञान',q1:'{name} का अस्तित्व क्यों है?',q2:'आपकी सृष्टि का अर्थ?',q3:'आप कहाँ के हैं?'},
+  ta:{h_title:'என்னை §கண்டறி§',h_sub:'ஒவ்வொரு ஆன்மாவும் கடவுளின் படைப்பு.',nc_title:'✦ உங்கள் பெயர் என்ன?',nc_sub:'கடவுள் உங்களிடம் நேரடியாக பேசுவதற்காக.',name_ph:'உங்கள் பெயரை உள்ளிடுங்கள்…',name_btn:'🪷 தொடரவும்',up_label:'✦ உங்கள் புகைப்படம்',up_sub:'ஒரு படம் — கடவுள் உங்களுக்குள் உள்ள புனித மலரை வெளிப்படுத்துவார்',up_note:'👤 மனித படங்கள் மட்டும்',up_greet:' உங்கள் தெய்வீக மலர் காத்திருக்கிறது…',load_msg:'கடவுளின் படைப்பை படிக்கிறோம்…',err_msg:'🙏 மனித புகைப்படத்தை பதிவேற்றுங்கள்.',lbl_flower:'✦ உங்கள் புனித மலர்',lbl_name:'✦ உங்கள் பெயரின் அர்த்தம்',lbl_face:'✦ சாமுத்ரிக சாஸ்திரம்',gm_lbl:'கடவுளின் செய்தி',lbl_share:'✦ உங்கள் கார்டை பகிரவும் ✦',btn_wa:'WhatsApp',btn_save:'சேமிக்கவும்',btn_another:'🪷 மற்றொரு படைப்பை காணவும்',w_title:'இந்து வேதங்களிலிருந்து ஞானம்',q1:'{name} ஏன் இருக்கிறார்?',q2:'உங்கள் படைப்பின் அர்த்தம்?',q3:'நீங்கள் எங்கு சேர்ந்தவர்?'},
+  te:{h_title:'నన్ను §కనుగొను§',h_sub:'ప్రతి ఆత్మ దేవుని సృష్టి.',nc_title:'✦ మీ పేరు ఏమిటి?',nc_sub:'దేవుడు మీతో నేరుగా మాట్లాడటానికి.',name_ph:'మీ పేరు నమోదు చేయండి…',name_btn:'🪷 కొనసాగించండి',up_label:'✦ మీ ఫోటో',up_sub:'ఒక పోర్ట్రెయిట్ — దేవుడు మీలో పూవు వెల్లడిస్తాడు',up_note:'👤 మానవ ఫోటోలు మాత్రమే',up_greet:' మీ దివ్య పూవు వేచి ఉంది…',load_msg:'దేవుని సృష్టిని చదువుతున్నాం…',err_msg:'🙏 మానవ ఫోటో అప్‌లోడ్ చేయండి.',lbl_flower:'✦ మీ పవిత్ర పూవు',lbl_name:'✦ మీ పేరు అర్థం',lbl_face:'✦ సాముద్రిక శాస్త్రం',gm_lbl:'దేవుని సందేశం',lbl_share:'✦ మీ కార్డ్ షేర్ చేయండి ✦',btn_wa:'WhatsApp',btn_save:'సేవ్',btn_another:'🪷 మరొక సృష్టి',w_title:'హిందూ గ్రంథాల జ్ఞానం',q1:'{name} ఎందుకు ఉన్నారు?',q2:'మీ సృష్టి అర్థం?',q3:'మీరు ఎక్కడికి చెందినవారు?'},
+  bn:{h_title:'নিজেকে §খুঁজুন§',h_sub:'প্রতিটি আত্মাই ঈশ্বরের সৃষ্টি।',nc_title:'✦ আপনার নাম কী?',nc_sub:'ঈশ্বর আপনার সাথে সরাসরি কথা বলবেন।',name_ph:'আপনার নাম লিখুন…',name_btn:'🪷 এগিয়ে যান',up_label:'✦ আপনার ছবি',up_sub:'একটি সেলফি — ঈশ্বর আপনার ভেতরের ফুল প্রকাশ করবেন',up_note:'👤 শুধু মানুষের ছবি',up_greet:' আপনার দিব্য ফুল অপেক্ষা করছে…',load_msg:'ঈশ্বরের সৃষ্টি পড়া হচ্ছে…',err_msg:'🙏 মানুষের ছবি আপলোড করুন।',lbl_flower:'✦ আপনার পবিত্র ফুল',lbl_name:'✦ আপনার নামের অর্থ',lbl_face:'✦ সামুদ্রিক শাস্ত্র',gm_lbl:'ঈশ্বরের বার্তা',lbl_share:'✦ আপনার কার্ড শেয়ার করুন ✦',btn_wa:'WhatsApp',btn_save:'সেভ',btn_another:'🪷 আরেকটি সৃষ্টি',w_title:'হিন্দু শাস্ত্র থেকে জ্ঞান',q1:'{name} কেন আছেন?',q2:'আপনার সৃষ্টির অর্থ?',q3:'আপনি কোথায় আছেন?'},
+  mr:{h_title:'स्वतःला §ओळखा§',h_sub:'प्रत्येक आत्मा देवाची रचना आहे.',nc_title:'✦ तुमचे नाव काय आहे?',nc_sub:'देव तुमच्याशी थेट बोलण्यासाठी.',name_ph:'तुमचे नाव टाका…',name_btn:'🪷 पुढे जा',up_label:'✦ तुमचा फोटो',up_sub:'एक सेल्फी — देव तुमच्यातील पवित्र फूल प्रकट करेल',up_note:'👤 केवळ मानवी फोटो',up_greet:' तुमचे दिव्य फूल वाट पाहत आहे…',load_msg:'देवाची सृष्टी वाचत आहोत…',err_msg:'🙏 मानवी फोटो अपलोड करा.',lbl_flower:'✦ तुमचे पवित्र फूल',lbl_name:'✦ तुमच्या नावाचा अर्थ',lbl_face:'✦ सामुद्रिक शास्त्र',gm_lbl:'देवाचा संदेश',lbl_share:'✦ तुमचे कार्ड शेअर करा ✦',btn_wa:'WhatsApp',btn_save:'जतन करा',btn_another:'🪷 आणखी एक सृष्टी',w_title:'हिंदू शास्त्रांतून ज्ञान',q1:'{name} का अस्तित्वात आहेत?',q2:'तुमच्या सृष्टीचा अर्थ?',q3:'तुम्ही कुठले?'},
+  gu:{h_title:'મને §શોધો§',h_sub:'દરેક આત્મા ભગવાનની સૃષ્ટિ છે.',nc_title:'✦ તમારું નામ શું છે?',nc_sub:'ભગવાન સીધા તમારી સાથે વાત કરવા.',name_ph:'તમારું નામ દાખલ કરો…',name_btn:'🪷 આગળ વધો',up_label:'✦ તમારો ફોટો',up_sub:'એક સેલ્ફી — ભગવાન તમારા ફૂલ દર્શાવશે',up_note:'👤 ફક્ત માનવ ફોટો',up_greet:' તમારું ફૂલ રાહ જુએ છે…',load_msg:'ભગવાનની સૃષ્ટિ વાંચી રહ્યા છીએ…',err_msg:'🙏 માનવ ફોટો અપલોડ કરો.',lbl_flower:'✦ તમારું ફૂલ',lbl_name:'✦ તમારા નામનો અર્થ',lbl_face:'✦ સામુદ્રિક શાસ્ત્ર',gm_lbl:'ભગવાનનો સંદેશ',lbl_share:'✦ તમારું કાર્ડ શેર કરો ✦',btn_wa:'WhatsApp',btn_save:'સેવ',btn_another:'🪷 બીજી સૃષ્ટિ',w_title:'હિન્દુ શાસ્ત્રોમાંથી જ્ઞાન',q1:'{name} શા માટે?',q2:'તમારી સૃષ્ટિનો અર્થ?',q3:'તમે ક્યાંના?'},
+  kn:{h_title:'ನನ್ನನ್ನು §ಕಂಡುಕೊಳ್ಳಿ§',h_sub:'ಪ್ರತಿ ಆತ್ಮ ದೇವರ ಸೃಷ್ಟಿ.',nc_title:'✦ ನಿಮ್ಮ ಹೆಸರೇನು?',nc_sub:'ದೇವರು ನಿಮ್ಮೊಂದಿಗೆ ನೇರವಾಗಿ ಮಾತನಾಡಲು.',name_ph:'ನಿಮ್ಮ ಹೆಸರು ನಮೂದಿಸಿ…',name_btn:'🪷 ಮುಂದುವರಿಯಿರಿ',up_label:'✦ ನಿಮ್ಮ ಫೋಟೋ',up_sub:'ಒಂದು ಸೆಲ್ಫಿ — ದೇವರು ನಿಮ್ಮ ಹೂವನ್ನು ಬಹಿರಂಗಗೊಳಿಸುತ್ತಾರೆ',up_note:'👤 ಮಾನವ ಫೋಟೋಗಳು ಮಾತ್ರ',up_greet:' ನಿಮ್ಮ ಹೂವು ಕಾಯುತ್ತಿದೆ…',load_msg:'ದೇವರ ಸೃಷ್ಟಿ ಓದುತ್ತಿದ್ದೇವೆ…',err_msg:'🙏 ಮಾನವ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.',lbl_flower:'✦ ನಿಮ್ಮ ಪವಿತ್ರ ಹೂವು',lbl_name:'✦ ನಿಮ್ಮ ಹೆಸರಿನ ಅರ್ಥ',lbl_face:'✦ ಸಾಮುದ್ರಿಕ ಶಾಸ್ತ್ರ',gm_lbl:'ದೇವರ ಸಂದೇಶ',lbl_share:'✦ ನಿಮ್ಮ ಕಾರ್ಡ್ ಹಂಚಿಕೊಳ್ಳಿ ✦',btn_wa:'WhatsApp',btn_save:'ಸೇವ್',btn_another:'🪷 ಮತ್ತೊಂದು ಸೃಷ್ಟಿ',w_title:'ಹಿಂದೂ ಗ್ರಂಥಗಳಿಂದ ಜ್ಞಾನ',q1:'{name} ಏಕೆ ಇದ್ದಾರೆ?',q2:'ನಿಮ್ಮ ಸೃಷ್ಟಿಯ ಅರ್ಥ?',q3:'ನೀವು ಎಲ್ಲಿ ಸೇರಿರುವಿರಿ?'},
+  ml:{h_title:'എന്നെ §കണ്ടെത്തൂ§',h_sub:'ഓരോ ആത്മാവും ദൈവത്തിന്റെ സൃഷ്ടിയാണ്.',nc_title:'✦ നിങ്ങളുടെ പേരെന്താണ്?',nc_sub:'ദൈവം നിങ്ങളോട് നേരിട്ട് സംസാരിക്കാൻ.',name_ph:'നിങ്ങളുടെ പേര് നൽകൂ…',name_btn:'🪷 തുടരുക',up_label:'✦ നിങ്ങളുടെ ഫോട്ടോ',up_sub:'ഒരു സെൽഫി — ദൈവം നിങ്ങളിലെ ഹൂവ് വെളിപ്പെടുത്തും',up_note:'👤 മനുഷ്യ ഫോട്ടോകൾ മാത്രം',up_greet:' നിങ്ങളുടെ പൂവ് കാത്തിരിക്കുന്നു…',load_msg:'ദൈവത്തിന്റെ സൃഷ്ടി വായിക്കുന്നു…',err_msg:'🙏 മനുഷ്യ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ.',lbl_flower:'✦ നിങ്ങളുടെ പൂവ്',lbl_name:'✦ നിങ്ങളുടെ പേരിന്റെ അർഥം',lbl_face:'✦ സാമുദ്രിക ശാസ്ത്രം',gm_lbl:'ദൈവത്തിന്റെ സന്ദേശം',lbl_share:'✦ കാർഡ് പങ്കിടൂ ✦',btn_wa:'WhatsApp',btn_save:'സേവ്',btn_another:'🪷 മറ്റൊരു സൃഷ്ടി',w_title:'ഹിന്ദു ഗ്രന്ഥങ്ങളിൽ നിന്ന് ജ്ഞാനം',q1:'{name} ഏകെ ഉണ്ട്?',q2:'നിങ്ങളുടെ സൃഷ്ടിയുടെ അർഥം?',q3:'നിങ്ങൾ ഏത് ആണ്?'},
+  pa:{h_title:'ਆਪਣੇ ਆਪ ਨੂੰ §ਲੱਭੋ§',h_sub:'ਹਰ ਆਤਮਾ ਰੱਬ ਦੀ ਰਚਨਾ ਹੈ।',nc_title:'✦ ਤੁਹਾਡਾ ਨਾਮ ਕੀ ਹੈ?',nc_sub:'ਤਾਂ ਕਿ ਰੱਬ ਤੁਹਾਡੇ ਨਾਲ ਸਿੱਧਾ ਗੱਲ ਕਰ ਸਕੇ।',name_ph:'ਆਪਣਾ ਨਾਮ ਦਰਜ ਕਰੋ…',name_btn:'🪷 ਅੱਗੇ ਵਧੋ',up_label:'✦ ਆਪਣੀ ਫੋਟੋ',up_sub:'ਇੱਕ ਸੈਲਫੀ — ਰੱਬ ਤੁਹਾਡੇ ਅੰਦਰ ਦਾ ਫੁੱਲ ਦੱਸੇਗਾ',up_note:'👤 ਸਿਰਫ਼ ਮਨੁੱਖੀ ਫੋਟੋਆਂ',up_greet:' ਤੁਹਾਡਾ ਫੁੱਲ ਉਡੀਕ ਕਰ ਰਿਹਾ ਹੈ…',load_msg:'ਰੱਬ ਦੀ ਰਚਨਾ ਪੜ੍ਹੀ ਜਾ ਰਹੀ ਹੈ…',err_msg:'🙏 ਮਨੁੱਖੀ ਫੋਟੋ ਅਪਲੋਡ ਕਰੋ।',lbl_flower:'✦ ਤੁਹਾਡਾ ਪਵਿੱਤਰ ਫੁੱਲ',lbl_name:'✦ ਤੁਹਾਡੇ ਨਾਮ ਦਾ ਅਰਥ',lbl_face:'✦ ਸਾਮੁਦ੍ਰਿਕ ਸ਼ਾਸਤਰ',gm_lbl:'ਰੱਬ ਦਾ ਸੁਨੇਹਾ',lbl_share:'✦ ਆਪਣਾ ਕਾਰਡ ਸ਼ੇਅਰ ਕਰੋ ✦',btn_wa:'WhatsApp',btn_save:'ਸੁਰੱਖਿਅਤ',btn_another:'🪷 ਇੱਕ ਹੋਰ ਰਚਨਾ',w_title:'ਹਿੰਦੂ ਗ੍ਰੰਥਾਂ ਤੋਂ ਗਿਆਨ',q1:'{name} ਕਿਉਂ ਹਨ?',q2:'ਤੁਹਾਡੀ ਰਚਨਾ ਦਾ ਅਰਥ?',q3:'ਤੁਸੀਂ ਕਿੱਥੋਂ?'},
+};
+let lang='en', userName='', currentFlower=null, currentImgSrc=null, currentImgEl=null;
+
+function setLang(l){
+  lang=l;
+  const t=LANGS[l];
+  const b=BOOK_LABELS[l]||BOOK_LABELS.en;
+  // Render h_title — convert §word§ to italic styled span
+  const rawTitle = t.h_title;
+  const styledTitle = rawTitle.replace(/§([^§]+)§/g, '<em>$1</em>');
+  document.getElementById('h-title').innerHTML = styledTitle;
+  document.getElementById('h-sub').innerHTML=t.h_sub;
+  document.getElementById('nc-title').textContent=t.nc_title;
+  document.getElementById('nc-sub').textContent=t.nc_sub;
+  document.getElementById('name-input').placeholder=t.name_ph;
+  document.getElementById('name-btn').textContent=t.name_btn;
+  document.getElementById('up-label').textContent=t.up_label;
+  document.getElementById('up-sub').textContent=t.up_sub;
+  document.getElementById('up-note').textContent=t.up_note;
+  document.getElementById('load-msg').textContent=t.load_msg;
+  if(userName) document.getElementById('up-greet').textContent='Welcome, '+userName+' 🙏';
+  // Update story section book labels
+  const books=document.querySelectorAll('.sq-book');
+  const order=[b.gita,b.ram,b.vedas,b.buddha,b.jain,b.sikh];
+  books.forEach((el,i)=>{ if(order[i]) el.textContent=order[i]; });
+  // Update "Or Pick a Sacred Quote" label
+  const pickLabel=document.querySelector('#sec-story .card-label');
+  if(pickLabel) pickLabel.textContent=b.pick;
+}
+
+// ══════════════════════════════════════════════════
+// FLOWERS DATA
+// ══════════════════════════════════════════════════
+const FLOWERS=[
+  {emoji:'🪷',name:'Lotus · Padma · पद्म',color:'#7BB8D4',deity:'Vishnu & Brahma',element:'Water',
+   shloka:'पद्मपत्रमिवाम्भसा — As a lotus leaf is untouched by water, the wise soul is untouched by sin.',source:'Bhagavad Gita · Chapter 5, Verse 10',
+   title:'The Soul that Rises from Mud',sub:'पवित्रता • जागृति • विमुक्ति',
+   meaning:'The Padma (lotus) grows in the deepest mud yet blooms in perfect purity. Vishnu stands upon it, Brahma emerges from it. {name}\'s soul is this lotus — born into struggle, yet capable of rising above it all in complete beauty and grace.',
+   nameMeaning:' reflects the quality of the sacred lotus — in Hindu tradition, those whose names carry pure vibrations are destined to rise above the conditions they are born into.',
+   faceReading:{default:'Your face carries what Samudrik Shastra calls "Sattvic grace" — calm eyes, a naturally devotional expression, features that suggest inner peace. Those with this quality have performed many lifetimes of tapas (spiritual practice).',bright:'A wide, luminous face in Samudrik Shastra indicates Rajasic energy — leadership and dharmic authority. Lord Rama was described as having this broad, luminous face.',dark:'A composed, refined face in Samudrik Shastra indicates deep Sattvic purity — spiritual depth and direct connection to the Divine.',neutral:'Your face carries natural serenity — what Samudrik Shastra calls the mark of the witness, the one who sees clearly without judgment.'},
+   pillars:[{i:'💎',t:'Purity',v:'Untouched by ego'},{i:'☀️',t:'Awakening',v:'Rising to light'},{i:'🌊',t:'Detachment',v:'Above the world'}],
+   why:'{name} exists because this world needed a soul capable of growing through darkness without being darkened. The mud is not your prison — the mud is your guru.',
+   meaning2:'Every challenge {name} has faced is God\'s hand shaping each petal. You bloom not despite difficulty but through it — the highest teaching of the Bhagavad Gita.',
+   belong:'{name}, you belong to Vishnu — the Preserver. You are here to maintain balance, to serve with grace, to be the lotus in every muddy room you enter.',
+   msg:'"Dear {name}, I placed you in difficulty not to break you, but to show through you that beauty can emerge from anywhere. You are My lotus. Rise."',
+   quote:'"{name} — like the lotus, God placed you in the deepest waters not to drown, but to show the world that purity always rises. 🪷"\n— Bhagavad Gita 5:10\nshyam0412.github.io/creation-of-god'},
+  {emoji:'🌸',name:'Cherry Blossom · Ashoka · अशोक',color:'#E8768A',deity:'Brahma',element:'Air',
+   shloka:'नित्यं विगतस्पृहः — जातस्य हि ध्रुवो मृत्युः — For the born, death is certain; for the dead, birth is certain.',source:'Bhagavad Gita · Chapter 2, Verse 27',
+   title:'The Beauty of Sacred Impermanence',sub:'अनित्यता • समर्पण • वर्तमान क्षण',
+   meaning:'The blossom blooms for only days, yet stops the whole world. God teaches {name} through this flower: do not cling to permanence. Live fully, bloom completely — the most beautiful things are brief, and that brevity is their divine gift.',
+   nameMeaning:' carries the energy of conscious presence — in Sanskrit tradition, this vibration is associated with those who are fully alive in the present moment, gifted with an awareness that others rarely find.',
+   faceReading:{default:'Your face carries the quality of openness and presence — eyes that are fully awake. Samudrik Shastra calls this the face of the witness, one who sees the beauty in each passing moment.',bright:'A wide, open forehead in Samudrik Shastra indicates Vayu (air) energy — quick intelligence and the ability to move through life without being weighed down by the past.',dark:'A high, refined face in Samudrik Shastra indicates the blessings of Saraswati — artistic sensitivity and a mind that perceives beauty where others see only ordinary life.',neutral:'Your features suggest someone who is fully present — Samudrik Shastra says this quality of presence is the rarest and most divine gift a soul can carry.'},
+   pillars:[{i:'⏳',t:'Impermanence',v:'Present is complete'},{i:'🌬️',t:'Surrender',v:'Let go with grace'},{i:'✨',t:'Presence',v:'Bloom fully'}],
+   why:'{name} was given the extraordinary gift of feeling deeply. This sensitivity — which sometimes feels like a burden — is God\'s way of ensuring you never take the beauty of existence for granted.',
+   meaning2:'The soul of {name} is like a blossom: it does not hold back its fragrance waiting for the perfect moment. It blooms completely, right now, and trusts God to carry the petals wherever they need to go.',
+   belong:'{name}, you belong to Brahma\'s eternal cycle. The Bhagavad Gita says the soul never dies — only the blossom falls, never the tree.',
+   msg:'"Dear {name}, you ask why beautiful things end. But nothing truly ends. When petals fall, they become the soil for the next blossom. Everything returns to Me. You will too."',
+   quote:'"{name} — God created you to bloom completely in this moment, not forever. And that is what makes you breathtakingly beautiful. 🌸"\n— Bhagavad Gita 2:27\nshyam0412.github.io/creation-of-god'},
+  {emoji:'🌺',name:'Hibiscus · Japa Pushpa · जपापुष्प',color:'#CC2200',deity:'Ganesha & Kali',element:'Fire',
+   shloka:'यत्करोषि यदश्नासि यज्जुहोषि ददासि यत् — तत्कुरुष्व मदर्पणम् — Whatever you do, eat, offer, give — do it as offering to Me.',source:'Bhagavad Gita · Chapter 9, Verse 27',
+   title:'The Devoted Offering to the Divine',sub:'भक्ति • अग्नि • समर्पण',
+   meaning:'The Japa Pushpa (hibiscus) is offered at God\'s feet across India for thousands of years. "Japa" means repetition of God\'s name. {name} carries this energy: total devotion, fierce love, and the courage to offer everything without holding back.',
+   nameMeaning:' resonates with the fire element in Hindu astrology — those who carry this vibration are natural devotees, burning with love and purpose, destined to serve from the deepest place of the heart.',
+   faceReading:{default:'Your face carries what Samudrik Shastra calls "Bhakta Mukha" — the devotee\'s face. A quality of warmth and intensity simultaneously. This is a face that has known deep feeling and emerged stronger.',bright:'Strong, prominent features in Samudrik Shastra indicate Martian (Mangal) energy — fierce determination and the courage of a warrior. You are built to stand firm.',dark:'Sharp, defined features indicate Agni (fire) energy — passionate intelligence and the capacity to transform everything you touch.',neutral:'Your expression carries warmth and depth — Samudrik Shastra says this combination is the mark of the true devotee: one who loves completely.'},
+   pillars:[{i:'🔥',t:'Devotion',v:'Total surrender'},{i:'❤️',t:'Fierce Love',v:'Holds nothing back'},{i:'🙏',t:'Worship',v:'Life as prayer'}],
+   why:'{name} exists to love with complete intensity and offer that love back to its divine source. The Narada Bhakti Sutras say the highest love is love offered to God through every act toward all beings.',
+   meaning2:'{name}\'s heart is a Japa — a constant repetition of God\'s name. The love you feel for others, the fire you carry for truth — all of this is your hibiscus offering at God\'s feet.',
+   belong:'{name}, you belong to Shakti — the divine feminine power. You carry the energy of Kali who destroys only what is false, and of Ganesha who clears all obstacles for those with pure hearts.',
+   msg:'"Dear {name}, every prayer you have ever whispered, every tear of devotion — I received every single one. I am always listening. I am always here."',
+   quote:'"{name} — your love is Japa — a sacred repetition of God\'s name with every heartbeat and act of giving. 🌺"\n— Bhagavad Gita 9:27\nshyam0412.github.io/creation-of-god'},
+  {emoji:'🌼',name:'Sunflower · Surya Pushpa · सूर्यपुष्प',color:'#F0C060',deity:'Surya (Sun God)',element:'Fire & Ether',
+   shloka:'आदित्यवर्णं तमसः परस्तात् — तमेव विदित्वाति मृत्युमेति — Knowing that Sun-colored Being beyond darkness, one transcends death.',source:'Shri Suktam · Rigveda & Shvetashvatara Upanishad 3:8',
+   title:'Always Turning Toward the Light',sub:'आस्था • सूर्य • दिव्य निष्ठा',
+   meaning:'The sunflower follows the sun from dawn to dusk — "Surya Bhakti" in the Vedas. {name}, your entire soul is heliotropic — no matter how dark the night, there is a part of you that always knows where the light is. That instinct is God calling you home.',
+   nameMeaning:' carries solar energy in its vibration — in Vedic astrology, this resonates with Surya, the Sun God. Those with this quality naturally illuminate others and are drawn toward truth like sunflowers toward light.',
+   faceReading:{default:'Your natural gaze carries what Samudrik Shastra calls "Divya Drishti" — a quality of seeing beyond the surface. People feel truly seen by you in a way that feels divine.',bright:'"Surya Netra" — sun eyes in Samudrik Shastra. Bright, wide-set eyes indicate clarity of vision and natural leadership that draws people into your warmth like moths to flame.',dark:'Focused, intense eyes indicate Agni (solar fire) — the concentrated beam that can illuminate the world with a single idea. Arjuna himself had this quality of focused gaze.',neutral:'Your expression has a natural radiance — Samudrik Shastra says those whose faces naturally brighten a room carry Surya\'s blessing from previous lifetimes.'},
+   pillars:[{i:'☀️',t:'Faith',v:'Always seeking'},{i:'🌻',t:'Constancy',v:'Never turns away'},{i:'💛',t:'Radiance',v:'Gives without counting'}],
+   why:'{name} was given an unquenchable longing — a feeling there is always something more, something truer. This is not restlessness. This is the soul remembering God. That longing IS the divine calling you home.',
+   meaning2:'The Katha Upanishad says the Atman is like the sun — it never sets, never dims. {name}\'s inner light cannot be extinguished by any darkness in this world.',
+   belong:'{name}, you belong to Surya — the divine sun the Rigveda calls "the eye of the universe." You are here to illuminate, to warm those who are cold, to shine without asking whether it\'s worth it.',
+   msg:'"Dear {name}, you have never been lost. Even in your darkest nights, you were always turning toward Me — even without knowing it. That turning is My own light in you, calling itself home."',
+   quote:'"{name} — God built into you an unbreakable compass. No matter how dark, your soul always knows where the light is. 🌼"\n— Shri Suktam, Rigveda\nshyam0412.github.io/creation-of-god'},
+  {emoji:'🌹',name:'Rose · Shatpatra · शतपत्र',color:'#C4284A',deity:'Krishna & Lakshmi',element:'Water & Earth',
+   shloka:'प्रियो हि ज्ञानिनोऽत्यर्थमहं — स च मम प्रियः — The wise one is exceedingly dear to Me, and I am dear to the wise one.',source:'Bhagavad Gita · Chapter 7, Verse 17',
+   title:'Love Without Condition, Grace Without Asking',sub:'प्रेम • सौंदर्य • दिव्य अनुग्रह',
+   meaning:'The rose gives its perfume to everyone — the saint, the sinner, the rich, the poor — without asking "are you worthy?" {name} was created with this same quality of love. The thorns teach others to approach your heart with care. They are not a flaw — they are wisdom.',
+   nameMeaning:' carries the vibration of Venus (Shukra) in Vedic astrology — beauty, grace, and magnetic love. Those with this energy are described in the Natya Shastra as artist-devotees: people who make the world more beautiful simply by moving through it.',
+   faceReading:{default:'Your face carries "Snigdha Bhava" — a naturally nourishing quality in Samudrik Shastra. People feel fed by your presence, as if they have eaten something warm and comforting. This is divine love made visible.',bright:'"Vaishnava Mukha" — the face of a devotee of Krishna in Samudrik Shastra. Natural grace, warmth in the eyes, a slight natural smile that others find immediately trustworthy.',dark:'Delicate, refined features indicate Shukra (Venus) energy — artistic beauty and the capacity to create beauty wherever you go.',neutral:'Your expression has a naturally gentle quality — Samudrik Shastra says the gentleness of a face reflects the gentleness of the soul that inhabits it.'},
+   pillars:[{i:'💗',t:'Unconditional',v:'Love without asking'},{i:'🌿',t:'Wisdom',v:'Thorns protect heart'},{i:'🌹',t:'Grace',v:'Beauty as purpose'}],
+   why:'{name} exists to demonstrate that love without condition is not weakness — it is the most powerful force in the universe. The Narada Bhakti Sutras say: "Love is the nature of the highest reality."',
+   meaning2:'{name} is God\'s love letter to this world — written with every quality that makes life worth living: gentleness, beauty, the willingness to give fragrance even to those who do not notice.',
+   belong:'{name}, you belong to Krishna in Vrindavan — to the realm where love is the only law. The Srimad Bhagavatam says those who carry devotion\'s fragrance are always near God.',
+   msg:'"Dear {name}, I gave you the capacity to love. That capacity came from Me. When you love another, you give them a piece of My own heart. Please, never stop."',
+   quote:'"{name} — you are God\'s love letter, written in the fragrance of roses, placed in the hands of this world as His most beautiful gift. 🌹"\n— Srimad Bhagavatam\nshyam0412.github.io/creation-of-god'},
+  {emoji:'🌿',name:'Sacred Tulsi · Vrinda · वृन्दा',color:'#4A7C59',deity:'Vishnu',element:'Earth & Ether',
+   shloka:'सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः — सर्वे भद्राणि पश्यन्तु — May all be happy, may all be free from disease, may all see auspiciousness.',source:'Brihadaranyaka Upanishad · Shanti Patha',
+   title:'The Sacred Healer — God\'s Medicine on Earth',sub:'सेवा • उपचार • दिव्य रक्षा',
+   meaning:'Tulsi is the most sacred plant in Hinduism — placed at the center of every home, offered to Vishnu daily. The Skanda Purana says even seeing Tulsi destroys sin. {name} carries this energy: you are medicine for those in your life — healing hearts, relationships, broken hopes.',
+   nameMeaning:' resonates with Mercury (Budha) and Jupiter (Brihaspati) in Vedic astrology — the guru vibration. Those whose names carry this energy are described as natural healers and teachers who restore what is broken simply by being present.',
+   faceReading:{default:'Your face carries "Vaidya Mukha" — the healer\'s face in Samudrik Shastra. A quality of calm attention that makes people feel safe. This is a face that has witnessed much suffering and responded with compassion rather than turning away.',bright:'A calm, steady expression indicates Shani (Saturn) energy — depth, patience, and wisdom that comes from having truly lived through difficulty and emerged with grace.',dark:'A composed, serene face indicates Budha (Mercury) energy — healing intelligence and the ability to communicate truth in a way that heals rather than wounds.',neutral:'Your natural expression has a quality of stillness — Samudrik Shastra says the still face belongs to the one who has found their center, and whose stillness becomes a refuge for others.'},
+   pillars:[{i:'🌱',t:'Healing',v:'Restores broken things'},{i:'🛡️',t:'Protection',v:'Guards the sacred'},{i:'🙏',t:'Service',v:'Exists to give'}],
+   why:'{name} exists to heal — not necessarily bodies, but the deeper wounds: loneliness, confusion, the feeling of being unseen. You carry within you exactly the medicine that specific people in your life are waiting for.',
+   meaning2:'The Vishnu Purana says Tulsi once prayed: "Let me serve You in every lifetime, in every form." {name}, that prayer was answered in you. Your life is a continuous act of divine service.',
+   belong:'{name}, you belong to Vishnu — the Sustainer of all life. You are here to keep life going, to hold things together when they want to fall apart, to be the sacred plant at the center of someone\'s world.',
+   msg:'"Dear {name}, I placed healing inside you the way I placed medicine in every Tulsi leaf — quietly, completely, without announcement. You are carrying gifts people desperately need. Give them freely."',
+   quote:'"{name} — God placed healing in you the way He placed sacred medicine in every Tulsi leaf. You are here to restore what is broken. 🌿"\n— Skanda Purana & Vishnu Purana\nshyam0412.github.io/creation-of-god'},
+];
+
+// ══════════════════════════════════════════════════
+// NAME MEANINGS
+// ══════════════════════════════════════════════════
+const NAME_DB={
+  arjun:{o:'Sanskrit · अर्जुन',m:'"The bright, pure one." Arjuna was the supreme archer chosen by Krishna to receive the Bhagavad Gita — chosen because of his pure heart and relentless pursuit of truth.'},
+  arjuna:{o:'Sanskrit · अर्जुन',m:'"The bright one." Chosen by Krishna as his disciple because of pure heart and relentless pursuit of truth.'},
+  priya:{o:'Sanskrit · प्रिया',m:'"Beloved, dear to all." From the root "pri" meaning to love. The Vishnu Purana says love (priya) is the essence of all creation.'},
+  ram:{o:'Sanskrit · राम',m:'"One who delights, who fills with joy." The seventh avatar of Vishnu — the ideal of dharma, love, duty, and grace.'},
+  rama:{o:'Sanskrit · राम',m:'"One who delights all beings with joy." The ideal human — seventh avatar of Vishnu.'},
+  sita:{o:'Sanskrit · सीता',m:'"Furrow of the earth." Born from the earth itself. Sita symbolizes purity, patience, and the unconditional love that holds creation together.'},
+  krishna:{o:'Sanskrit · कृष्ण',m:'"The all-attractive one." The 8th avatar of Vishnu and the complete divine incarnation. This name carries divine love, music, and the ultimate wisdom of the Gita.'},
+  shyam:{o:'Sanskrit · श्याम',m:'"The beautiful dark-complexioned one." An epithet of Lord Krishna, whose dark complexion symbolizes the infinite sky and deep ocean. You carry the beauty of the cosmic infinite.'},
+  radha:{o:'Sanskrit · राधा',m:'"She who achieves." Radha is the supreme devotee of Krishna, representing the soul\'s longing for union with the Divine. The Brahma Vaivarta Purana says Radha is the shakti of Krishna himself.'},
+  ananya:{o:'Sanskrit · अनन्या',m:'"Without equal, unique." One completely devoted to God. The Bhagavad Gita uses this word for the highest devotee — one who sees no other.'},
+  dev:{o:'Sanskrit · देव',m:'"Divine being, the shining one." The Rigveda says devas are those who illuminate the world. You carry divine light in your very name.'},
+  aditya:{o:'Sanskrit · आदित्य',m:'"Son of Aditi (infinity), the Sun." The twelve Adityas are solar deities. This name carries solar energy — vitality, brilliance, and the power to dispel darkness.'},
+  surya:{o:'Sanskrit · सूर्य',m:'"The Sun." Surya is a direct manifestation of Brahman. You are named after the source of all life and light on earth.'},
+  lakshmi:{o:'Sanskrit · लक्ष्मी',m:'"She of auspicious signs, divine prosperity." Lakshmi is the goddess of wealth, beauty, and spiritual grace. This name carries the blessings of abundance.'},
+  vishnu:{o:'Sanskrit · विष्णु',m:'"The all-pervading one." Vishnu permeates all creation. To carry this name is to carry the spirit of divine preservation and universal love.'},
+  shiva:{o:'Sanskrit · शिव',m:'"The auspicious, the kind." Lord of yogis, source of liberation. This name carries the power of transformation and ultimate truth.'},
+  ganesh:{o:'Sanskrit · गणेश',m:'"Lord of beginnings, remover of obstacles." This name carries the blessing of new starts and the opening of all doors.'},
+  anjali:{o:'Sanskrit · अञ्जलि',m:'"Sacred offering, joined palms." The anjali mudra — palms joined in prayer — is the gesture of offering yourself to God. You are a living offering to the Divine.'},
+  neha:{o:'Sanskrit · नेहा',m:'"Love, affection, rain of blessings." From "sneha" meaning that which nurtures. The Vishnu Purana says love is the force that holds all of creation together.'},
+  pooja:{o:'Sanskrit · पूजा',m:'"Sacred worship." Your very name means an act of worship — you are a living prayer walking on this earth.'},
+  ravi:{o:'Sanskrit · रवि',m:'"The Sun, the radiant one." Ravi is one of the twelve names of Surya in the Rigveda. You carry the solar blessing — warmth and the power to illumine others.'},
+  kavya:{o:'Sanskrit · काव्य',m:'"Poetry, the expression of the soul." The Vedas themselves are considered the original kavya. You carry the gift of divine expression.'},
+  rohan:{o:'Sanskrit · रोहण',m:'"Ascending, rising." The Vishnu Purana uses this word for the soul\'s ascent toward liberation. You are always meant to rise.'},
+  vivek:{o:'Sanskrit · विवेक',m:'"The highest wisdom." In Advaita Vedanta, viveka is the ability to distinguish the real from the unreal. This is considered the highest human faculty.'},
+  deepa:{o:'Sanskrit · दीपा',m:'"The lamp, the illuminator." The lamp (deepa) represents the Atman — the inner light that never dies. You are that lamp.'},
+  aarav:{o:'Sanskrit · आरव',m:'"Peaceful, wise sound." From "rav" meaning peaceful musical sound. Those who carry this name bring calm wherever they go.'},
+  ishaan:{o:'Sanskrit · ईशान',m:'"The divine one, the Sun." An epithet of Shiva and the sun. You carry divine illumination and the sacred quality of the northeast — the auspicious direction.'},
+  ananya:{o:'Sanskrit · अनन्या',m:'"Without equal." The Bhagavad Gita uses this word for the highest devotee — completely devoted, seeing no other.'},
+  divya:{o:'Sanskrit · दिव्य',m:'"Divine, celestial, luminous." Everything heavenly is described as divya in the Vedas. You are named after the divine light itself.'},
+  asha:{o:'Sanskrit · आशा',m:'"Hope, desire, aspiration." The Upanishads say asha (hope) is what keeps the cosmos moving — the divine longing of the soul for reunion with God.'},
+  maya:{o:'Sanskrit · माया',m:'"Divine creative power." In Vedanta, Maya is not illusion — it is the power by which the infinite Brahman creates and sustains all of existence.'},
+};
+
+function getNameMeaning(name){
+  const k=name.toLowerCase().trim().replace(/\s+/g,'');
+  if(NAME_DB[k]) return NAME_DB[k];
+  const letter=k[0]||'a';
+  const fb={
+    a:{o:'Sanskrit · आ (Ā)',m:`"${name}" begins with 'A' — the first sound of creation, the first letter of Om (Aum). The Bhagavad Gita (10:33) says: "Among letters, I am the letter A." Your name begins where God begins.`},
+    b:{o:'Sanskrit · ब (Ba)',m:`"${name}" carries "Bhava" — divine existence and feeling. Your name resonates with the deep devotional energy of bhakti.`},
+    d:{o:'Sanskrit · द (Da)',m:`"${name}" begins with 'Da' — the Brihadaranyaka Upanishad teaches three divine qualities beginning with Da: Dama (self-control), Dana (charity), Daya (compassion). Your name carries all three.`},
+    g:{o:'Sanskrit · ग (Ga)',m:`"${name}" carries Ganesha's sacred syllable — the remover of obstacles. Your name carries the blessing of auspicious beginnings.`},
+    h:{o:'Sanskrit · ह (Ha)',m:`"${name}" begins with 'Ha' — the sound of Hamsa (the divine swan), the symbol of the liberated soul in Hindu philosophy. The swan of pure soul.`},
+    i:{o:'Sanskrit · इ (I)',m:`"${name}" carries the "I" of Ishvara — the divine Lord. In Sanskrit, "I" is the sound of divine consciousness becoming aware of itself.`},
+    j:{o:'Sanskrit · ज (Ja)',m:`"${name}" begins with 'Ja' — related to "Japa" (sacred repetition) and "Jnana" (divine wisdom). Your name vibrates with the energy of sacred knowledge.`},
+    k:{o:'Sanskrit · क (Ka)',m:`"${name}" begins with 'Ka' — in the Vedas, Ka is a name of Brahma the creator. The Rigveda asks "Ko dadhara?" — "Who upholds this?" and answers: Ka (the Divine).`},
+    l:{o:'Sanskrit · ल (La)',m:`"${name}" carries "Laksha" — goal, aspiration, and divine aim. Your name resonates with purposeful existence, always moving toward the sacred.`},
+    m:{o:'Sanskrit · म (Ma)',m:`"${name}" begins with 'Ma' — the first sound of the mother, the sound of love. "Ma" means mother and "to measure the immeasurable." Your name carries the love of the Divine Mother.`},
+    n:{o:'Sanskrit · न (Na)',m:`"${name}" begins with 'Na' — connected to "Namah," the sacred bow of surrender. Every prayer contains this syllable. Your name carries divine humility.`},
+    p:{o:'Sanskrit · प (Pa)',m:`"${name}" carries "Prana" (life force) and "Param" (the supreme). The Upanishads say Prana is Brahman itself. Your name vibrates with the very life force of the universe.`},
+    r:{o:'Sanskrit · र (Ra)',m:`"${name}" carries the solar syllable — the seed sound of Surya (the Sun). In the Gayatri Mantra, the most sacred Vedic prayer, 'Ra' appears in "Tat Savitur Varenyam." Your name carries solar divine light.`},
+    s:{o:'Sanskrit · स (Sa)',m:`"${name}" begins with 'Sa' — connected to "Sat" (truth, being) — the first part of "Sat-Chit-Ananda" (Truth-Consciousness-Bliss), the three qualities of Brahman. Your name begins with divine truth.`},
+    t:{o:'Sanskrit · त (Ta)',m:`"${name}" carries "Tat" — That (the Divine). "Tat tvam asi" — That Thou Art. Your name contains the sacred pointer toward the Ultimate Reality.`},
+    v:{o:'Sanskrit · व (Va)',m:`"${name}" carries "Vac" (divine speech) and "Vasudeva" (Krishna, who dwells everywhere). Your name carries the energy of sacred speech and divine presence.`},
+    y:{o:'Sanskrit · य (Ya)',m:`"${name}" begins with 'Ya' — connected to "Yajna" (sacred sacrifice and offering). The Bhagavad Gita says the entire cosmos is sustained by yajna. Your name carries this sacred energy of offering.`},
+  };
+  return fb[letter]||{o:'Sacred · दिव्य नाम',m:`"${name}" is your divine name — given at birth, chosen before birth. In Hindu tradition, the Graha (cosmic forces) guide the naming. Your name carries a unique vibration that resonates with your soul's purpose.`};
+}
+
+// ══════════════════════════════════════════════════
+// HUMAN DETECTION (5-layer)
+// ══════════════════════════════════════════════════
+function isLikelyHuman(img){
+  const W=img.naturalWidth,H=img.naturalHeight;
+  const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
+  // Layer 1: reject posters/text
+  const cf=mk(40,40);const xf=cf.getContext('2d');xf.drawImage(img,0,0,40,40);
+  const df=xf.getImageData(0,0,40,40).data;
+  let black=0,white=0,hiSat=0,midTone=0,tot=df.length/4;
+  for(let i=0;i<df.length;i+=4){const r=df[i],g=df[i+1],b=df[i+2];const bri=(r+g+b)/3,sat=Math.max(r,g,b)-Math.min(r,g,b);if(bri<25)black++;if(bri>235)white++;if(sat>130)hiSat++;if(bri>50&&bri<210&&sat<100)midTone++;}
+  if(black/tot>.45||white/tot>.45||hiSat/tot>.30||(black+white)/tot>.65||midTone/tot<.20)return false;
+  // Layer 2: colour variety
+  const ct=mk(20,20);const xt=ct.getContext('2d');xt.drawImage(img,0,0,20,20);
+  const dt=xt.getImageData(0,0,20,20).data;
+  const rv=new Set(),gv=new Set(),bv=new Set();
+  for(let i=0;i<dt.length;i+=4){rv.add(Math.round(dt[i]/20));gv.add(Math.round(dt[i+1]/20));bv.add(Math.round(dt[i+2]/20));}
+  if(rv.size+gv.size+bv.size<12)return false;
+  // Layer 3: skin detection in 6 zones
+  const zones=[{sx:W*.25,sy:H*.05,sw:W*.5,sh:H*.45},{sx:W*.3,sy:H*.15,sw:W*.4,sh:H*.35},{sx:W*.1,sy:H*.1,sw:W*.35,sh:H*.45},{sx:W*.55,sy:H*.1,sw:W*.35,sh:H*.45},{sx:W*.2,sy:H*.25,sw:W*.6,sh:H*.3},{sx:W*.1,sy:H*0,sw:W*.8,sh:H*.55}];
+  function isSkin(r,g,b){const bri=(r+g+b)/3,sat=Math.max(r,g,b)-Math.min(r,g,b);return bri>45&&bri<235&&sat>10&&sat<110&&r>g&&r>b&&r>55&&g>28&&b>15&&(r-b)>18&&(r-g)>=0&&(r-g)<75&&g>b&&g<220;}
+  let best=0;
+  for(const z of zones){const cz=mk(24,24);const xz=cz.getContext('2d');xz.drawImage(img,z.sx,z.sy,z.sw,z.sh,0,0,24,24);const dz=xz.getImageData(0,0,24,24).data;let sk=0,px=dz.length/4;for(let i=0;i<dz.length;i+=4)if(isSkin(dz[i],dz[i+1],dz[i+2]))sk++;best=Math.max(best,sk/px);}
+  if(best<.22)return false;
+  // Layer 5: edge density
+  const ce=mk(30,30);const xe=ce.getContext('2d');xe.drawImage(img,0,0,30,30);const de=xe.getImageData(0,0,30,30).data;
+  let edges=0;
+  for(let y=1;y<29;y++)for(let x=0;x<30;x++){const i=((y*30)+x)*4,iu=(((y-1)*30)+x)*4;if(Math.abs((de[i]+de[i+1]+de[i+2])/3-(de[iu]+de[iu+1]+de[iu+2])/3)>80)edges++;}
+  if(edges/(29*30)>.18)return false;
+  return true;
+}
+
+// ══════════════════════════════════════════════════
+// MUSIC (Web Audio API - ambient sacred tones)
+// ══════════════════════════════════════════════════
+let musicOn=false,audioCtx=null,sitarTimer=null;
+function toggleMusic(){
+  const btn=document.getElementById('music-btn');
+  if(musicOn){
+    musicOn=false;clearTimeout(sitarTimer);
+    if(audioCtx){try{audioCtx.close();}catch(e){}audioCtx=null;}
+    btn.textContent='🎵';btn.classList.remove('playing');return;
+  }
+  try{
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    musicOn=true;btn.textContent='🪈';btn.classList.add('playing');
+
+    // ── FLUTE: sine wave + vibrato + soft attack ──
+    // Indian flute scale (Yaman raga - very calming)
+    const baseFreq=261.6; // Sa (C4)
+    const ratios=[1, 9/8, 5/4, 45/32, 3/2, 5/3, 15/8, 2]; // Yaman scale
+
+    function playFlute(freq,startTime,dur,vol=0.06){
+      if(!audioCtx||!musicOn) return;
+      // Main tone - sine for flute
+      const osc=audioCtx.createOscillator();
+      // Vibrato LFO
+      const lfo=audioCtx.createOscillator();
+      const lfoGain=audioCtx.createGain();
+      // Breath noise
+      const noise=audioCtx.createOscillator();
+      const noiseGain=audioCtx.createGain();
+      const lpf=audioCtx.createBiquadFilter();
+      const gainNode=audioCtx.createGain();
+      const master=audioCtx.createGain();
+
+      // Flute body: sine wave
+      osc.type='sine';
+      osc.frequency.setValueAtTime(freq,startTime);
+      // Vibrato: 5Hz wobble, ±4Hz depth
+      lfo.type='sine';lfo.frequency.value=5;
+      lfoGain.gain.value=4;
+      lfo.connect(lfoGain);lfoGain.connect(osc.frequency);
+      // Breath overtone: slightly detuned sine
+      noise.type='sine';noise.frequency.value=freq*2.01;
+      noiseGain.gain.value=0.012;
+      // Low pass to soften
+      lpf.type='lowpass';lpf.frequency.value=1800;lpf.Q.value=0.7;
+
+      // Envelope: slow attack like blowing
+      gainNode.gain.setValueAtTime(0,startTime);
+      gainNode.gain.linearRampToValueAtTime(vol,startTime+0.18); // slow attack
+      gainNode.gain.setValueAtTime(vol,startTime+dur*0.75);
+      gainNode.gain.exponentialRampToValueAtTime(0.001,startTime+dur);
+
+      master.gain.value=0.7;
+
+      osc.connect(lpf);noise.connect(lpf);lpf.connect(gainNode);
+      gainNode.connect(master);noiseGain.connect(master);
+      master.connect(audioCtx.destination);
+
+      osc.start(startTime);noise.start(startTime);lfo.start(startTime);
+      osc.stop(startTime+dur+0.05);noise.stop(startTime+dur+0.05);lfo.stop(startTime+dur+0.05);
+    }
+
+    // Drone pad — very soft held note
+    function playDrone(freq,startTime,dur){
+      if(!audioCtx||!musicOn) return;
+      const o=audioCtx.createOscillator();
+      const g=audioCtx.createGain();
+      const f=audioCtx.createBiquadFilter();
+      o.type='sine';o.frequency.value=freq;
+      f.type='lowpass';f.frequency.value=400;
+      g.gain.setValueAtTime(0,startTime);
+      g.gain.linearRampToValueAtTime(0.025,startTime+0.5);
+      g.gain.setValueAtTime(0.025,startTime+dur-0.5);
+      g.gain.exponentialRampToValueAtTime(0.001,startTime+dur);
+      o.connect(f);f.connect(g);g.connect(audioCtx.destination);
+      o.start(startTime);o.stop(startTime+dur+0.1);
+    }
+
+    // Calming Yaman-inspired melodic phrases
+    const phrases=[
+      [0,2,4,5,4,2,0],      // ascending then down
+      [4,5,7,5,4,2],         // mid-range
+      [2,4,5,7,5,4,2,0],    // long descending
+      [0,2,0,2,4,2],         // gentle oscillation
+    ];
+
+    function fluteLoop(){
+      if(!musicOn||!audioCtx)return;
+      const now=audioCtx.currentTime;
+      const ph=phrases[Math.floor(Math.random()*phrases.length)];
+      const noteLen=1.1; // slower, more peaceful
+      const gap=0.18;    // breath gap between notes
+
+      // Drone underneath
+      playDrone(baseFreq/2, now, ph.length*(noteLen+gap)+0.5);
+      playDrone(baseFreq*ratios[4]/2, now, ph.length*(noteLen+gap)+0.5);
+
+      // Melody
+      ph.forEach((ni,i)=>{
+        const freq=baseFreq*ratios[ni%ratios.length];
+        playFlute(freq, now+i*(noteLen+gap), noteLen, 0.055);
+      });
+
+      const loopDur=(ph.length*(noteLen+gap)+1.5)*1000;
+      sitarTimer=setTimeout(fluteLoop, loopDur);
+    }
+    fluteLoop();
+  }catch(e){musicOn=false;}
+}
+
+// ══════════════════════════════════════════════════
+// SECTION SWITCHER
+// ══════════════════════════════════════════════════
+function switchSec(s){
+  document.querySelectorAll('.sec').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.bnav-btn').forEach(e=>e.classList.remove('on'));
+  document.getElementById('sec-'+s).classList.add('on');
+  document.getElementById('bn-'+s).classList.add('on');
+  const sc=document.getElementById('scroll-content');
+  if(sc) sc.scrollTop=0; else window.scrollTo({top:0});
+}
+
+// ══════════════════════════════════════════════════
+// SPLASH — wire up with event listener not inline onclick
+// ══════════════════════════════════════════════════
+function enterApp(){
+  const splash = document.getElementById('splash');
+  const app = document.getElementById('app-shell');
+  splash.classList.add('hide');
+  setTimeout(()=>{
+    splash.style.display='none';
+    app.style.display='flex';
+  }, 480);
+}
+
+// Wire button via addEventListener so it always works
+document.addEventListener('DOMContentLoaded', function(){
+  const btn = document.getElementById('splash-btn');
+  if(btn){
+    btn.addEventListener('click', enterApp);
+    btn.addEventListener('touchend', function(e){ e.preventDefault(); enterApp(); });
+  }
+});
+
+// ══════════════════════════════════════════════════
+// FIND SELF FLOW
+// ══════════════════════════════════════════════════
+function clearNameError(){
+  document.getElementById('name-input').classList.remove('error');
+  document.getElementById('name-err').classList.remove('show');
+}
+function backToName(){
+  document.getElementById('step-upload').style.display='none';
+  document.getElementById('step-name').style.display='block';
+}
+function goToUpload(){
+  const n=document.getElementById('name-input').value.trim();
+  if(!n){
+    document.getElementById('name-input').classList.add('error');
+    document.getElementById('name-err').classList.add('show');
+    document.getElementById('name-input').focus();
+    return;
+  }
+  userName=n;
+  document.getElementById('step-name').style.display='none';
+  document.getElementById('step-upload').style.display='block';
+  const t=LANGS[lang];
+  document.getElementById('uz-add').querySelector('#up-greet').textContent='Welcome, '+n+' 🙏';
+}
+
+function handleUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    currentImgSrc=ev.target.result;
+    const img=new Image();
+    img.onload=()=>{
+      if(!isLikelyHuman(img)){showErr();document.getElementById('file-input').value='';return;}
+      currentImgEl=img;
+      // Show added state
+      document.getElementById('uz-preview-img').src=currentImgSrc;
+      document.getElementById('uz-add').style.display='none';
+      document.getElementById('uz-added').style.display='flex';
+      document.getElementById('err-box').classList.remove('show');
+      // Start loading
+      document.getElementById('step-upload').style.display='none';
+      document.getElementById('loading').classList.add('show');
+      const t=LANGS[lang];
+      document.getElementById('load-msg').textContent=t.load_msg;
+      setTimeout(()=>showResult(),2000);
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function showErr(){
+  const t=LANGS[lang];
+  document.getElementById('err-msg').innerHTML=t.err_msg;
+  document.getElementById('err-box').classList.add('show');
+  document.getElementById('step-upload').style.display='block';
+}
+function dismissErr(){document.getElementById('err-box').classList.remove('show');}
+
+function showResult(){
+  document.getElementById('loading').classList.remove('show');
+  // Pick flower
+  const cv=document.createElement('canvas');cv.width=1;cv.height=1;
+  const ctx=cv.getContext('2d');ctx.drawImage(currentImgEl,0,0,1,1);
+  const [r,g,b]=ctx.getImageData(0,0,1,1).data;
+  let idx;
+  if(r>g&&r>b&&r>130)idx=2;
+  else if(g>r&&g>b&&g>110)idx=5;
+  else if(r>180&&g>155&&b<100)idx=3;
+  else if(r>155&&g<110&&b>80)idx=4;
+  else if(b>r&&b>g&&b>110)idx=0;
+  else{const nh=userName.toLowerCase().split('').reduce((a,c)=>a+c.charCodeAt(0),0);idx=nh%FLOWERS.length;}
+  currentFlower=FLOWERS[idx];
+  renderResult();
+}
+
+function p(s){return s?s.replace(/\{name\}/g,userName):'';}
+
+function renderResult(){
+  const f=currentFlower,t=LANGS[lang];
+  // Image
+  document.getElementById('r-img').src=currentImgSrc;
+  document.getElementById('r-name-chip').textContent='✦ '+userName;
+  document.getElementById('r-fe').textContent=f.emoji;
+  document.getElementById('r-fn').textContent=f.name;
+  // Shloka
+  document.getElementById('r-shloka').textContent=f.shloka;
+  document.getElementById('r-src').textContent='— '+f.source;
+  // Labels
+  document.getElementById('r-lbl-flower').textContent=t.lbl_flower;
+  document.getElementById('r-lbl-name').textContent=t.lbl_name;
+  document.getElementById('r-lbl-face').textContent=t.lbl_face;
+  document.getElementById('r-gm-name').textContent=userName;
+  document.getElementById('r-lbl-share').textContent=t.lbl_share;
+  document.getElementById('r-btn-save').textContent=t.btn_save;
+  document.getElementById('r-btn-another').textContent=t.btn_another;
+  // Content
+  document.getElementById('r-title').textContent=f.title;
+  document.getElementById('r-sub').textContent=f.sub;
+  document.getElementById('r-meaning').textContent=p(f.meaning);
+  // Name meaning
+  const nm=getNameMeaning(userName);
+  document.getElementById('r-name-origin').textContent=nm.o;
+  document.getElementById('r-name-meaning').textContent=`Your name "${userName}"${f.nameMeaning} ${nm.m}`;
+  // Face reading
+  const cv2=document.createElement('canvas');cv2.width=10;cv2.height=10;
+  const cx2=cv2.getContext('2d');cx2.drawImage(currentImgEl,0,0,10,10);
+  const d2=cx2.getImageData(0,0,10,10).data;
+  let br=0,cnt=0;for(let i=0;i<d2.length;i+=4){br+=(d2[i]+d2[i+1]+d2[i+2])/3;cnt++;}br/=cnt;
+  const faceType=br>160?'bright':br<90?'dark':'neutral';
+  const faceText=f.faceReading[faceType]||f.faceReading.default;
+  document.getElementById('r-face').textContent=`According to Samudrik Shastra (the ancient Hindu science of face reading, referenced in the Vishnu Purana), ${userName}'s face carries a sacred signature: ${faceText} The ancient text says: "The face is the reflection of past karmas and the map of the soul's future dharma."`;
+  // Pillars
+  document.getElementById('r-pillars').innerHTML=f.pillars.map(pl=>`<div class="pillar"><span class="pi">${pl.i}</span><div class="pt">${pl.t}</div><div class="pv">${pl.v}</div></div>`).join('');
+  // Questions
+  const q1=(t.q1||'Why does {name} exist?').replace('{name}',userName);
+  const q2=(t.q2||'What is the meaning of your creation?').replace('{name}',userName);
+  const q3=(t.q3||'Where do you belong?').replace('{name}',userName);
+  document.getElementById('r-questions').innerHTML=`
+    <div class="q-item"><div class="q-lbl">🔍 ${q1}</div><div class="q-ans">${p(f.why)}</div></div>
+    <div class="q-item"><div class="q-lbl">🌸 ${q2}</div><div class="q-ans">${p(f.meaning2)}</div></div>
+    <div class="q-item"><div class="q-lbl">🙏 ${q3}</div><div class="q-ans">${p(f.belong)}</div></div>`;
+  // God's message
+  document.getElementById('r-gm').textContent=p(f.msg);
+  // Show result
+  document.getElementById('result').classList.add('show');
+  document.getElementById('wisdom-section').style.display='block';
+  // Build share card
+  setTimeout(()=>buildFindSelfCard(),300);
+  // Scroll
+  setTimeout(()=>document.getElementById('scroll-content').scrollTop=document.getElementById('result').offsetTop-60,150);
+}
+
+function buildFindSelfCard(){
+  if(!currentFlower||!currentImgEl)return;
+  const cv=document.getElementById('findself-share-canvas');
+  const W=1080,H=1080;cv.width=W;cv.height=H;
+  const ctx=cv.getContext('2d');
+  // BG — deep dark with golden gradient
+  const bg=ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,'#1A0A00');bg.addColorStop(1,'#0D0500');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  // Radial gold glow
+  const glow=ctx.createRadialGradient(W/2,H*.35,0,W/2,H*.35,350);
+  glow.addColorStop(0,'rgba(201,147,58,.18)');glow.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+  // Circular photo
+  const R=220,cx=W/2,cy=H*.32;
+  ctx.save();ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.clip();
+  const ar=currentImgEl.naturalWidth/currentImgEl.naturalHeight;
+  const sw2=ar>1?R*2*ar:R*2,sh2=ar>1?R*2:R*2/ar;
+  ctx.drawImage(currentImgEl,cx-sw2/2,cy-sh2/2,sw2,sh2);ctx.restore();
+  // Gold rings
+  ctx.beginPath();ctx.arc(cx,cy,R+5,0,Math.PI*2);ctx.strokeStyle='#C9933A';ctx.lineWidth=5;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,R+16,0,Math.PI*2);ctx.strokeStyle='rgba(201,147,58,.3)';ctx.lineWidth=2;ctx.stroke();
+  // OM
+  ctx.font='bold 54px serif';ctx.fillStyle='rgba(240,192,96,.8)';ctx.textAlign='center';ctx.fillText('ॐ',W/2,65);
+  // Gradient overlay bottom
+  const ov=ctx.createLinearGradient(0,H*.45,0,H);
+  ov.addColorStop(0,'rgba(13,5,0,0)');ov.addColorStop(.3,'rgba(13,5,0,.7)');ov.addColorStop(1,'rgba(13,5,0,.97)');
+  ctx.fillStyle=ov;ctx.fillRect(0,0,W,H);
+  // Name
+  ctx.font='italic 68px Georgia,serif';ctx.fillStyle='#F0C060';ctx.textAlign='center';ctx.fillText(userName,W/2,H*.62);
+  // Flower badge
+  const by=H*.68;
+  ctx.beginPath();const bw=380;roundRectCtx(ctx,W/2-bw/2,by-38,bw,70,35);
+  ctx.fillStyle='rgba(201,147,58,.15)';ctx.fill();ctx.strokeStyle='rgba(240,192,96,.45)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.font='36px serif';ctx.fillText(currentFlower.emoji,W/2-80,by+10);
+  ctx.font='bold 26px Tahoma,sans-serif';ctx.fillStyle='#F0C060';ctx.textAlign='left';
+  ctx.fillText(currentFlower.name.split('·')[0].trim(),W/2-42,by+10);
+  ctx.textAlign='center';
+  // Shloka short
+  ctx.font='italic 32px Georgia,serif';ctx.fillStyle='rgba(253,246,227,.75)';
+  wrapCanvas(ctx,currentFlower.shloka,W/2,H*.77,W-140,46,3);
+  // Divider
+  ctx.strokeStyle='rgba(201,147,58,.35)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(100,H*.88);ctx.lineTo(W-100,H*.88);ctx.stroke();
+  ctx.font='26px Tahoma,sans-serif';ctx.fillStyle='rgba(201,147,58,.5)';
+  ctx.fillText('— '+currentFlower.source,W/2,H*.91);
+  // URL
+  ctx.font='bold 28px Tahoma,sans-serif';ctx.fillStyle='rgba(240,192,96,.6)';
+  ctx.fillText('🌸 shyam0412.github.io/creation-of-god',W/2,H*.96);
+  ctx.font='24px Tahoma,sans-serif';ctx.fillStyle='rgba(201,147,58,.4)';
+  ctx.fillText('सृष्टि — Find Myself',W/2,H*.982);
+}
+
+function roundRectCtx(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+function wrapCanvas(ctx,text,x,y,maxW,lh,maxLines){const words=text.split(' ');let line='';const lines=[];for(const w of words){const t=line+w+' ';if(ctx.measureText(t).width>maxW&&line!==''){lines.push(line.trim());line=w+' ';}else line=t;if(maxLines&&lines.length>=maxLines)break;}lines.push(line.trim());const sl=maxLines?lines.slice(0,maxLines):lines;const sy=y-(sl.length-1)*lh/2;sl.forEach((l,i)=>ctx.fillText(l,x,sy+i*lh));}
+
+function shareFindSelf(){
+  const cv=document.getElementById('findself-share-canvas');
+  const quote=p(currentFlower.quote);
+  const text=`ॐ *Find Myself* 🙏\n\n*${userName}* — your sacred flower is *${currentFlower.name}*\n${currentFlower.emoji}\n\n${quote}\n\n✨ Discover your divine meaning:\n🌸 shyam0412.github.io/creation-of-god`;
+  if(navigator.share){cv.toBlob(blob=>{const file=new File([blob],'creation-of-god.png',{type:'image/png'});navigator.share({title:'Find Myself — '+userName,text,files:[file]}).catch(()=>waFallback(text));});}
+  else waFallback(text);
+}
+function downloadFindSelf(){const cv=document.getElementById('findself-share-canvas');const a=document.createElement('a');a.download=`divine-${userName}-${Date.now()}.png`;a.href=cv.toDataURL('image/png');a.click();toast('Image saved! 🌸');}
+function waFallback(text){window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
+function resetFindSelf(){
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('wisdom-section').style.display='none';
+  document.getElementById('step-name').style.display='block';
+  document.getElementById('step-upload').style.display='none';
+  document.getElementById('uz-add').style.display='flex';
+  document.getElementById('uz-added').style.display='none';
+  document.getElementById('file-input').value='';
+  document.getElementById('name-input').value='';
+  userName='';currentFlower=null;currentImgSrc=null;currentImgEl=null;
+  const sc2=document.getElementById('scroll-content');if(sc2)sc2.scrollTop=0;
+}
+
+// ══════════════════════════════════════════════════
+// CREATE STORY
+// ══════════════════════════════════════════════════
+let storyBgIdx=0,storyPhoto=null,storyPhotoSrc=null,storyTheme='full';
+
+function pickTheme(theme,el){
+  storyTheme=theme;
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  livePreview();
+}
+const BG_GRADIENTS=[
+  ['#0D0520','#1a0a2e','#0a0818'],['#0a1a0a','#0d2b0d','#051005'],
+  ['#1a0505','#2d0a0a','#0f0303'],['#1a1000','#2e1c00','#0f0800'],
+  ['#05101a','#0a1e2d','#020a10'],['#12001a','#200030','#0a0012'],
+  ['#001a12','#002d1e','#000f0a'],['#1a1a00','#2d2d00','#0f0f00'],
+];
+
+function pickBg(idx,el){
+  storyBgIdx=idx;
+  document.querySelectorAll('.bp-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  if(document.getElementById('story-preview').style.display!=='none')drawStory();
+}
+
+function loadStoryPhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{storyPhotoSrc=ev.target.result;const img=new Image();img.onload=()=>{storyPhoto=img;document.getElementById('photo-thumb').src=storyPhotoSrc;document.getElementById('photo-add').style.display='none';document.getElementById('photo-added').style.display='flex';if(document.getElementById('story-preview').style.display!=='none')drawStory();};img.src=ev.target.result;};
+  reader.readAsDataURL(file);
+}
+
+function pickQ(el,quote){
+  document.querySelectorAll('.dq').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('cs-quote').value=quote;
+  if(document.getElementById('story-preview').style.display!=='none')drawStory();
+}
+
+function livePreview(){
+  // Live update canvas if preview is already visible
+  if(document.getElementById('story-preview').style.display !== 'none'){
+    drawStory();
+  }
+}
+
+function generateStory(){
+  document.getElementById('story-preview').style.display='block';
+  drawStory();
+  setTimeout(()=>document.getElementById('scroll-content').scrollTop=document.getElementById('story-preview').offsetTop-60,200);
+}
+
+function drawStory(){
+  const cv=document.getElementById('story-canvas');
+  const W=1080,H=1920;
+  cv.width=W; cv.height=H;
+  cv.style.width='100%'; cv.style.height='auto';
+  const ctx=cv.getContext('2d');
+
+  // ── BACKGROUND ──
+  const bg=BG_GRADIENTS[storyBgIdx];
+  const grad=ctx.createLinearGradient(0,0,W*0.5,H);
+  grad.addColorStop(0,bg[0]);grad.addColorStop(0.5,bg[1]);grad.addColorStop(1,bg[2]);
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+
+  // Mandala overlay — all themes
+  ctx.save();ctx.globalAlpha=.05;ctx.strokeStyle='#C9933A';ctx.lineWidth=2;
+  for(const r of[360,290,220,150,80]){ctx.beginPath();ctx.arc(W/2,H/2,r,0,Math.PI*2);ctx.stroke();}
+  for(let a=0;a<8;a++){const an=(a/8)*Math.PI*2;ctx.beginPath();ctx.moveTo(W/2,H/2);ctx.lineTo(W/2+Math.cos(an)*400,H/2+Math.sin(an)*400);ctx.stroke();}
+  ctx.globalAlpha=1;ctx.restore();
+
+  // Radial glow — all themes
+  const glow=ctx.createRadialGradient(W/2,H*.35,0,W/2,H*.35,480);
+  glow.addColorStop(0,'rgba(201,147,58,.13)');glow.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+
+  // ── Fix 5: THEME CONTROLS what elements show ──
+  const showOM      = storyTheme==='full' || storyTheme==='om';
+  const showFlowers = storyTheme==='full';
+  // "clean" = no OM, no flowers — just bg + photo + quote + name
+
+  let topY = 80; // tracks where next element starts
+
+  if(showOM){
+    ctx.font='bold 120px serif';ctx.fillStyle='rgba(240,192,96,.88)';ctx.textAlign='center';
+    ctx.shadowColor='rgba(255,107,0,.5)';ctx.shadowBlur=44;
+    ctx.fillText('ॐ',W/2,topY+100);ctx.shadowBlur=0;
+    topY+=140;
+    drawGoldDiv(ctx,W,topY);
+    topY+=40;
+  }
+
+  if(showFlowers){
+    ctx.font='64px serif';ctx.textAlign='center';
+    ['🌸','🪷','🌺','🌼','🌸'].forEach((f,i)=>ctx.fillText(f,W/2-200+i*100,topY+60));
+    topY+=110;
+  }
+
+  // ── PHOTO ──
+  const hasPic=!!storyPhoto;
+  const PR=230, pcx=W/2;
+  let photoBottomY = topY;
+
+  if(hasPic){
+    const pcy = topY + PR + 30; // 30px gap below topY
+    const pglow=ctx.createRadialGradient(pcx,pcy,PR*.3,pcx,pcy,PR+60);
+    pglow.addColorStop(0,'rgba(201,147,58,.22)');pglow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=pglow;ctx.beginPath();ctx.arc(pcx,pcy,PR+60,0,Math.PI*2);ctx.fill();
+    ctx.save();ctx.beginPath();ctx.arc(pcx,pcy,PR,0,Math.PI*2);ctx.clip();
+    const par=storyPhoto.naturalWidth/storyPhoto.naturalHeight;
+    const psw=par>1?PR*2*par:PR*2,psh=par>1?PR*2:PR*2/par;
+    ctx.drawImage(storyPhoto,pcx-psw/2,pcy-psh/2,psw,psh);ctx.restore();
+    ctx.beginPath();ctx.arc(pcx,pcy,PR+6,0,Math.PI*2);ctx.strokeStyle='#C9933A';ctx.lineWidth=6;ctx.stroke();
+    ctx.beginPath();ctx.arc(pcx,pcy,PR+20,0,Math.PI*2);ctx.strokeStyle='rgba(201,147,58,.28)';ctx.lineWidth=2;ctx.stroke();
+    photoBottomY = pcy + PR + 60; // 60px gap after photo
+    topY = photoBottomY;
+  }
+
+  // ── Fix 2: fonts +2px ──
+  const QUOTE_FONT  = 54; // was 52
+  const NAME_FONT   = 70; // was 68
+  const lineH       = 76; // was 72, larger for bigger font
+  const maxLines    = 7;
+
+  const name  = document.getElementById('cs-name').value.trim()||'';
+  const quote = document.getElementById('cs-quote').value.trim()||'I am God\'s most intentional creation — blooming with divine purpose. 🪷';
+
+  // Measure quote lines
+  ctx.font=`italic ${QUOTE_FONT}px Georgia,serif`;
+  const words=quote.split(' ');
+  let testLine='',lineCount=0,linesArr=[];
+  for(const w of words){
+    const test=testLine+w+' ';
+    if(ctx.measureText(test).width>W-160&&testLine!==''){linesArr.push(testLine.trim());testLine=w+' ';}
+    else testLine=test;
+  }
+  linesArr.push(testLine.trim());
+  const sliced=linesArr.slice(0,maxLines);
+
+  const nameBlockH = name ? NAME_FONT+50 : 0; // 50px gap above name
+  const quoteBlockH = sliced.length * lineH;
+  const totalContentH = quoteBlockH + nameBlockH;
+
+  // ── Fix 1: center the whole content block in remaining space below photo ──
+  let contentY;
+  if(hasPic){
+    const remainingSpace = H - photoBottomY - 220; // 220px for bottom URL area
+    const idealTop = photoBottomY + (remainingSpace - totalContentH) / 2;
+    contentY = Math.max(photoBottomY + 40, idealTop); // at least 40px gap from photo
+  } else {
+    // No photo: center in full card minus top area and bottom area
+    const usableTop = topY + 40;
+    const usableBottom = H - 220;
+    contentY = usableTop + (usableBottom - usableTop - totalContentH) / 2;
+    contentY = Math.max(usableTop, contentY);
+  }
+
+  // ── QUOTE (Fix 2: 54px) ──
+  ctx.font=`italic ${QUOTE_FONT}px Georgia,serif`;
+  ctx.fillStyle='rgba(253,246,227,.93)';
+  ctx.textAlign='center';
+  ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=14;
+  sliced.forEach((l,i)=>ctx.fillText(l,W/2,contentY+i*lineH));
+  ctx.shadowBlur=0;
+
+  // ── NAME below quote — 50px gap (Fix 2: 70px) ──
+  if(name){
+    const nameY=contentY+sliced.length*lineH+50;
+    ctx.font=`italic bold ${NAME_FONT}px Georgia,serif`;
+    ctx.fillStyle='#F0C060';
+    ctx.textAlign='center';
+    ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=20;
+    ctx.fillText('— '+name,W/2,nameY);
+    ctx.shadowBlur=0;
+  }
+
+  // ── BOTTOM AREA — Fix 2: no "whatever you do" quote ──
+  drawGoldDiv(ctx,W,H-200);
+
+  // URL
+  ctx.font='bold 34px Tahoma,sans-serif';ctx.fillStyle='rgba(240,192,96,.62)';ctx.textAlign='center';
+  ctx.fillText('🌸 shyam0412.github.io/creation-of-god',W/2,H-140);
+  ctx.font='28px Tahoma,sans-serif';ctx.fillStyle='rgba(201,147,58,.42)';
+  ctx.fillText('सृष्टि — Find Myself',W/2,H-90);
+}
+
+function drawGoldDiv(ctx,W,y){
+  ctx.save();
+  const g=ctx.createLinearGradient(60,y,W-60,y);
+  g.addColorStop(0,'rgba(201,147,58,0)');g.addColorStop(.3,'rgba(201,147,58,.65)');
+  g.addColorStop(.5,'rgba(240,192,96,1)');g.addColorStop(.7,'rgba(201,147,58,.65)');g.addColorStop(1,'rgba(201,147,58,0)');
+  ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(60,y);ctx.lineTo(W-60,y);ctx.stroke();
+  ctx.font='32px serif';ctx.fillStyle='rgba(240,192,96,.75)';ctx.textAlign='center';ctx.fillText('❈',W/2,y+12);
+  ctx.restore();
+}
+
+function shareStory(){
+  const cv=document.getElementById('story-canvas');
+  const name=document.getElementById('cs-name').value.trim()||'A divine soul';
+  const quote=document.getElementById('cs-quote').value.trim()||'I am God\'s most intentional creation.';
+  const text=`ॐ *Find Myself* 🌸\n\n*${name}*\n\n"${quote}"\n\n✨ Create your own divine story card:\n🌸 shyam0412.github.io/creation-of-god\n\n_अपना दिव्य अर्थ खोजें_`;
+  if(navigator.share){cv.toBlob(blob=>{const file=new File([blob],'divine-story.png',{type:'image/png'});navigator.share({title:'My Divine Story',text,files:[file]}).catch(()=>waFallback(text));});}
+  else waFallback(text);
+}
+function downloadStory(){
+  const cv=document.getElementById('story-canvas');
+  const a=document.createElement('a');a.download=`divine-story-${Date.now()}.png`;a.href=cv.toDataURL('image/png');a.click();toast('Story saved! 🌸');
+}
+
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+</script>
+</body>
+</html>
